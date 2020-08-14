@@ -1,0 +1,127 @@
+﻿using Juicy.Inject.Binding.Attributes;
+using Juicy.Inject.Storage;
+using Juicy.Interfaces.Injection;
+using Juicy.Interfaces.Storage;
+using Juicy.Reflection;
+using Juicy.Reflection.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+
+namespace Juicy.Inject.Injection {
+    internal class Creator : ICreator {
+        private Injector Injector { get; }
+        private Reflector Reflector { get; }
+
+        private ICache<List<ICachedParameter>, Type, string> ParameterMapping { get; }
+        private ICache<List<ICachedParameter>, Type, string> InjectableParametersMapping { get; }
+
+        internal Creator(Injector injector, Reflector reflector) {
+            Injector = injector;
+            Reflector = reflector;
+            ParameterMapping = new Cache<List<ICachedParameter>, Type, string>();
+            InjectableParametersMapping = new Cache<List<ICachedParameter>, Type, string>();
+        }
+
+        object ICreator.CreateInstance(Type type) {
+            ICachedMethod selectedConstructor = GetConstructor(type);
+
+            if (selectedConstructor.Parameters.Count == 0) {
+                return Reflector.Instantiate(type);
+            } else if (selectedConstructor.Parameters.Count > 0) {
+                var parameters = new object[selectedConstructor.Parameters.Count];
+                for (int i = 0; i < parameters.Length; i++) {
+                    var parameter = selectedConstructor.Parameters.Find(p => p.Position == i);
+                    if (parameter == null) {
+                        throw new InvalidOperationException($"Failed to locate the parameter at position {i} in type {type}.");
+                    }
+
+                    if (parameter.HasAttribute(typeof(NamedAttribute))) {
+                        var attribute = parameter.GetAttribute<NamedAttribute>();
+                        if (!string.IsNullOrWhiteSpace(attribute?.Name)) {
+                            parameters[i] = Injector.Get(parameter.Type, attribute.Name);
+                        }
+                    } else {
+                        parameters[i] = Injector.Get(parameter.Type);
+                    }
+                }
+
+                return Reflector.Instantiate(type, parameters);
+            }
+
+            throw new InvalidOperationException($"Something horrible went wrong, could not create an instance of the type {type}.");
+        }
+
+        object ICreator.CreateInstanceWithParameters(Type type, params IParameterData[] args) {
+            ICachedMethod constructor = GetConstructor(type);
+
+            if (constructor.Parameters.Count == 0 && args.Length != 0) {
+                throw new InvalidOperationException($"Arguments were provided to create type {type.FullName}, but its constructor takes no arguments");
+            } else if (constructor.Parameters.Count < args.Length) {
+                throw new InvalidOperationException($"Arguments were provided to create type {type.FullName}, but its constructor takes less arguments");
+            }
+
+            var parameters = new object[constructor.Parameters.Count];
+            var injectableParameters = InjectableParametersMapping.IsCached(type) ?
+                InjectableParametersMapping.Get(type) : //
+                new List<ICachedParameter>(constructor.Parameters);
+            if (ParameterMapping.IsCached(type)) {
+                var mapping = ParameterMapping.Get(type);
+                for (int i = 0; i < mapping.Count; i++) {
+                    parameters[mapping[i].Position] = args[i].Value;
+                }
+            } else {
+                var mapping = new List<ICachedParameter>();
+                for (int i = 0; i < args.Length; i++) {
+                    var argType = args[i].Value.GetType();
+                    bool foundParameter = false;
+                    foreach (var parameter in constructor.Parameters) {
+                        var parameterName = parameter.GetAttribute<NamedAttribute>()?.Name;
+                        if (parameter.Type.IsAssignableFrom(argType) && args[i].Name == parameterName) {
+                            foundParameter = true;
+                            mapping.Add(parameter);
+                            parameters[mapping[i].Position] = args[i].Value;
+                            injectableParameters.Remove(parameter);
+                        }
+                    }
+                    if (!foundParameter) {
+                        throw new InvalidOperationException($"Failed to find a matching parameter of type {argType.FullName} while constructing {type.FullName}.");
+                    }
+                }
+
+                ParameterMapping.Cache(mapping, type);
+                InjectableParametersMapping.Cache(injectableParameters, type);
+            }
+
+            foreach (var injectableParameter in injectableParameters) {
+                var name = injectableParameter.GetAttribute<NamedAttribute>()?.Name;
+                parameters[injectableParameter.Position] = name != null ? //
+                    Injector.Get(injectableParameter.Type, name) : //
+                    Injector.Get(injectableParameter.Type);
+            }
+
+            return Reflector.Instantiate(type, parameters);
+        }
+
+        private ICachedMethod GetConstructor(Type type) {
+            ICachedMethod selectedConstructor = null;
+            List<ICachedMethod> constructors = Reflector.GetAttributedConstructors(type, typeof(InjectAttribute));
+            if (constructors.Count > 1) {
+                throw new InvalidOperationException($"Cannot create an instance of {type}, multiple constructors are annotated with [Inject]");
+            } else if (constructors.Count == 1) {
+                selectedConstructor = constructors[0];
+            }
+
+            if (selectedConstructor == null) {
+                selectedConstructor = Reflector.GetDefaultConstructor(type);
+            }
+
+            if (selectedConstructor == null) {
+                throw new InvalidOperationException($"No injectable constructors found for the type {type}");
+            }
+
+            return selectedConstructor;
+        }
+    }
+}
