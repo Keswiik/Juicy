@@ -32,7 +32,7 @@ namespace Juicy.Inject.Injection.Handler {
                 // TODO: determine if I am going to be lynched for doing this. I don't know how bad dynamic is for performance.
                 dynamic collection = Activator.CreateInstance(collectionBinding.BaseType);
                 foreach (Type implementationType in collectionBinding.ImplementationTypes) {
-                    dynamic value = Injector.Get(implementationType);
+                    dynamic value = Injector.Get(implementationType, null);
                     collection.Add(value);
                 }
 

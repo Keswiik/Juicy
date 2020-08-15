@@ -67,20 +67,11 @@ namespace Juicy.Inject.Injection {
         }
 
         public T Get<T>() {
-            return (T)Get(typeof(T));
+            return (T)Get(typeof(T), null);
         }
 
         public T Get<T>(string name) {
             return (T)Get(typeof(T), name);
-        }
-
-        /// <summary>
-        /// Gets an instance of <paramref name="type"/>.
-        /// </summary>
-        /// <param name="type">The type to get an instance of.</param>
-        /// <returns>An instance of <paramref name="type"/>.</returns>
-        internal object Get(Type type) {
-            return Get(BindingCache.Get(type), type, null);
         }
 
         /// <summary>
@@ -90,7 +81,11 @@ namespace Juicy.Inject.Injection {
         /// <param name="name">The name to get an instance of.</param>
         /// <returns>An instance of <paramref name="type"/> with <paramref name="name"/>.</returns>
         internal object Get(Type type, string name) {
-            return Get(BindingCache.Get(type, name), type, name);
+            return Get( //
+                name == null ?
+                    BindingCache.Get(type) : //
+                    BindingCache.Get(type, name), 
+                type, name);
         }
 
         /// <summary>
