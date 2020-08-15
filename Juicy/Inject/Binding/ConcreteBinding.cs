@@ -9,6 +9,7 @@ namespace Juicy.Inject.Binding {
 
     ///<inheritdoc cref="IConcreteBinding"/>
     public sealed class ConcreteBinding : Binding, IConcreteBinding {
+
         public Type ImplementationType { get; }
 
         public object Instance { get; }
@@ -39,7 +40,7 @@ namespace Juicy.Inject.Binding {
 
             private object Instance { get; set; }
 
-            internal ConcreteBindingComponent(Type type, IModule module) : base(type, module) { }
+            internal ConcreteBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
             /// <summary>
             /// Sets the implementation type for non-instance bindings.
@@ -71,7 +72,7 @@ namespace Juicy.Inject.Binding {
         /// Build used to produce new concrete bindings.
         /// </summary>
         public sealed class ConcreteBindingBuilder : ConcreteBindingComponent<ConcreteBindingBuilder>, IBuilder {
-            internal ConcreteBindingBuilder(Type type, IModule module) : base(type, module) { }
+            internal ConcreteBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
             IBinding IBuilder.Build() {
                 return new ConcreteBinding(this);

@@ -46,7 +46,7 @@ namespace Juicy.Inject.Injection {
                     throw new InvalidOperationException($"Binding from provided method named {method.Name} in {module.GetType().FullName} conflicts with an existing binding.");
                 }
 
-                IBuilder builder = new MethodBinding.MethodBindingBuilder(baseType, module) //
+                IBuilder builder = new MethodBinding.MethodBindingBuilder(baseType, BindingType.Method, module) //
                     .In(scope ?? BindingScope.Instance) //
                     .Named(name) //
                     .Method(method);

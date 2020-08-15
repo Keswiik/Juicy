@@ -14,21 +14,6 @@ namespace Juicy.Interfaces.Injection {
     internal interface IBindingHandler {
 
         /// <summary>
-        /// Checks if the current handler can accept the provided <paramref name="binding"/>.
-        /// </summary>
-        /// <param name="binding">A binding requested by an <see cref="IInjector"/>.</param>
-        /// <returns><c>true</c> if the handler can accept the binding, otherwise <c>false</c>.</returns>
-        internal bool CanHandle(IBinding binding);
-
-        /// <summary>
-        /// Checks if the binding requires initializing before it can be used.
-        /// </summary>
-        /// <remarks>This should be called <b>after</b> checking if the handler can accept the <paramref name="binding"/>.</remarks>
-        /// <param name="binding">The binding to check.</param>
-        /// <returns><c>true</c> if the binding requires initialization, otherwise <c>false</c>.</returns>
-        internal bool NeedsInitialized(IBinding binding);
-
-        /// <summary>
         /// Process the request for <paramref name="binding"/> and return the corresponding value.
         /// </summary>
         /// <remarks>

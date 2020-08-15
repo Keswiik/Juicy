@@ -1,4 +1,5 @@
-﻿using Juicy.Interfaces.Binding;
+﻿using Juicy.Constants;
+using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using Juicy.Reflection.Interfaces;
 using System;
@@ -33,7 +34,7 @@ namespace Juicy.Inject.Binding {
 
             private ICachedMethod _Method { get; set; }
 
-            internal MethodBindingComponent(Type type, IModule module) : base(type, module) { }
+            internal MethodBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
             /// <summary>
             /// Sets the method to be bound.
@@ -51,7 +52,7 @@ namespace Juicy.Inject.Binding {
         /// Builder used to produce new method bindings.
         /// </summary>
         public sealed class MethodBindingBuilder : MethodBindingComponent<MethodBindingBuilder>, IBuilder {
-            internal MethodBindingBuilder(Type type, IModule module) : base(type, module) { }
+            internal MethodBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
             IBinding IBuilder.Build() {
                 return new MethodBinding(this);

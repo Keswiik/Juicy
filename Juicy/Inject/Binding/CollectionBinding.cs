@@ -1,4 +1,5 @@
-﻿using Juicy.Interfaces.Binding;
+﻿using Juicy.Constants;
+using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace Juicy.Inject.Binding {
 
             public List<Type> ImplementationTypes { get; }
 
-            internal CollectionBindingComponent(Type type, IModule module) : base(type, module) {
+            internal CollectionBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
                 ImplementationTypes = new List<Type>();
             }
 
@@ -47,7 +48,7 @@ namespace Juicy.Inject.Binding {
         /// Builder used to produce new collection bindings.
         /// </summary>
         public class CollectionBindingBuilder : CollectionBindingComponent<CollectionBindingBuilder>, IBuilder {
-            internal CollectionBindingBuilder(Type type, IModule module) : base(type, module) { }
+            internal CollectionBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
             IBinding IBuilder.Build() {
                 return new CollectionBinding(this);
