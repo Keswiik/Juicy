@@ -1,4 +1,5 @@
-﻿using Juicy.Reflection.Interfaces;
+﻿using Juicy.Inject.Binding.Attributes;
+using Juicy.Reflection.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -6,9 +7,14 @@ namespace Juicy.Reflection.Models {
 
     ///<inheritdoc cref="ICachedType"/>
     internal sealed class CachedType : AttributeHolder, ICachedType {
-        private List<ICachedMethod> constructors;
 
-        private Dictionary<string, List<ICachedMethod>> methods;
+        public List<ICachedMethod> Constructors { get; }
+
+        public Dictionary<string, List<ICachedMethod>> Methods { get; }
+
+        public ICachedMethod InjectableConstructor { get; }
+
+        public Type Type { get; }
 
         /// <summary>
         /// Consumes builder to fill out attributes.
@@ -18,22 +24,15 @@ namespace Juicy.Reflection.Models {
             Constructors = component._Constructors;
             Methods = component._Methods;
             Type = component._Type;
+
+            InjectableConstructor = Constructors.Find(c => c.Parameters.Count == 0);
+            if (InjectableConstructor == null) {
+                var attributedConstructors = Constructors.FindAll(c => c.HasAttribute(typeof(InjectAttribute)));
+                // multiple annotations are bad, cause failures to happen down the line
+                // TODO: maybe more useful exceptions here, blow up immediate when cached type is invalid
+                InjectableConstructor = attributedConstructors.Count == 1 ? attributedConstructors[0] : null;
+            }
         }
-
-        // TODO: remove unnecessary list creation
-        public List<ICachedMethod> Constructors {
-            get => new List<ICachedMethod>(constructors);
-
-            set => constructors = value;
-        }
-
-        public Dictionary<string, List<ICachedMethod>> Methods {
-            get => new Dictionary<string, List<ICachedMethod>>(methods);
-
-            set => methods = value;
-        }
-
-        public Type Type { get; private set; }
 
         #region Builder
 

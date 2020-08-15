@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Juicy.Constants;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,6 +15,27 @@ using System.Text;
         /// The method's name.
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// The name of the binding this method is for.
+        /// </summary>
+        /// <remarks>
+        /// This is only applicable for methods marked for injection bindings.
+        /// </remarks>
+        string BindingName { get; }
+
+        /// <summary>
+        /// Whether or not the method provides bindings.
+        /// </summary>
+        bool Provides { get; }
+
+        /// <summary>
+        /// The scope of the binding provided by this method.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to instance bindings, but only matters when methods are marked for injection bindings.
+        /// </remarks>
+        BindingScope Scope { get; }
 
         /// <summary>
         /// The method's return type.

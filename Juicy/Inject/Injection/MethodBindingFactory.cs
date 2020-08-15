@@ -35,8 +35,8 @@ namespace Juicy.Inject.Injection {
             List<IBinding> bindings = new List<IBinding>();
             foreach (var method in providedMethods) {
                 var baseType = method.ReturnType;
-                var scope = method.GetAttribute<ScopeAttribute>()?.Scope;
-                var name = method.GetAttribute<NamedAttribute>()?.Name;
+                var scope = method.Scope;
+                var name = method.BindingName;
 
                 if (name != null && string.IsNullOrWhiteSpace(name)) {
                     throw new InvalidOperationException($"Invalid empty or whitespace name on provider method named {method.Name} in {module.GetType().FullName}.");
@@ -47,7 +47,7 @@ namespace Juicy.Inject.Injection {
                 }
 
                 IBuilder builder = new MethodBinding.MethodBindingBuilder(baseType, BindingType.Method, module) //
-                    .In(scope ?? BindingScope.Instance) //
+                    .In(scope) //
                     .Named(name) //
                     .Method(method);
 

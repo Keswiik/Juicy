@@ -14,6 +14,11 @@ using System.Collections.Generic;
         List<ICachedMethod> Constructors { get; }
 
         /// <summary>
+        /// A cached version of the <b>ONE</b> constructor that can be used for injections.
+        /// </summary>
+        ICachedMethod InjectableConstructor { get; }
+
+        /// <summary>
         /// Cached versions of the type's methods.
         /// </summary>
         Dictionary<string, List<ICachedMethod>> Methods { get; }
