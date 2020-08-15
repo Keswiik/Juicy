@@ -57,7 +57,7 @@ namespace Juicy.Inject.Injection {
                             parameters[i] = Injector.Get(parameter.Type, attribute.Name);
                         }
                     } else {
-                        parameters[i] = Injector.Get(parameter.Type);
+                        parameters[i] = Injector.Get(parameter.Type, null);
                     }
                 }
 
@@ -116,9 +116,7 @@ namespace Juicy.Inject.Injection {
             // map injected parameters
             foreach (var injectableParameter in injectableParameters) {
                 var name = injectableParameter.GetAttribute<NamedAttribute>()?.Name;
-                parameters[injectableParameter.Position] = name != null ? //
-                    Injector.Get(injectableParameter.Type, name) : //
-                    Injector.Get(injectableParameter.Type);
+                parameters[injectableParameter.Position] = Injector.Get(injectableParameter.Type, name);
             }
 
             return Reflector.Instantiate(type, parameters);

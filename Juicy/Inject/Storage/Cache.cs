@@ -52,15 +52,11 @@ using System.Collections.Generic;
         }
 
         bool ICache<T, K, N>.IsCached(K key) {
-            var groupedCache = GetGroupedCache(key);
-
-            return groupedCache?.IsCached() == true;
+            return GetGroupedCache(key)?.IsCached() == true;
         }
 
         bool ICache<T, K, N>.IsCached(K key, N subKey) {
-            var groupedCache = GetGroupedCache(key);
-
-            return groupedCache?.IsCached(subKey) == true;
+            return GetGroupedCache(key)?.IsCached(subKey) == true;
         }
 
         private IGroupedCache<T, N> GetGroupedCache(K key) {
