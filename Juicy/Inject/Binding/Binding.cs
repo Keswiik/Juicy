@@ -11,6 +11,8 @@ namespace Juicy.Inject.Binding {
 
         public BindingScope Scope { get; }
 
+        public BindingType Type { get; }
+
         public string Name { get; }
 
         public IModule Module { get; }
@@ -22,6 +24,7 @@ namespace Juicy.Inject.Binding {
         protected Binding(IBindingBuilderComponent component) {
             BaseType = component.BaseType;
             Scope = component.BindingScope;
+            Type = component.BindingType;
             Name = component.Name;
             Module = component.Module;
         }
@@ -38,6 +41,8 @@ namespace Juicy.Inject.Binding {
 
             internal BindingScope BindingScope { get; }
 
+            internal BindingType BindingType { get; }
+
             internal string Name { get; }
         }
 
@@ -52,6 +57,8 @@ namespace Juicy.Inject.Binding {
 
             BindingScope IBindingBuilderComponent.BindingScope => BindingScope;
 
+            BindingType IBindingBuilderComponent.BindingType => BindingType;
+
             string IBindingBuilderComponent.Name => Name;
 
             protected Type BaseType { get; }
@@ -60,10 +67,13 @@ namespace Juicy.Inject.Binding {
 
             protected BindingScope BindingScope { get; set; }
 
+            protected BindingType BindingType { get; }
+
             protected string Name { get; set; }
 
-            internal BindingComponent(Type type, IModule module) {
+            internal BindingComponent(Type type, BindingType bindingType, IModule module) {
                 BaseType = type;
+                BindingType = bindingType;
                 Module = module;
             }
 
@@ -93,7 +103,7 @@ namespace Juicy.Inject.Binding {
         /// </summary>
         public class BindingBuilder : BindingComponent<BindingBuilder>, IBuilder {
 
-            internal BindingBuilder(Type type, IModule module) : base(type, module) {
+            protected BindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
             }
 
             IBinding IBuilder.Build() {

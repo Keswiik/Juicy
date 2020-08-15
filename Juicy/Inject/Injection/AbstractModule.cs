@@ -1,4 +1,5 @@
-﻿using Juicy.Inject.Binding;
+﻿using Juicy.Constants;
+using Juicy.Inject.Binding;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
@@ -20,19 +21,19 @@ namespace Juicy.Inject.Injection {
         }
 
         public ConcreteBinding.ConcreteBindingBuilder Bind<T>() {
-            var builder = new ConcreteBinding.ConcreteBindingBuilder(typeof(T), this);
+            var builder = new ConcreteBinding.ConcreteBindingBuilder(typeof(T), BindingType.Concrete, this);
             BindingBuilders.Add(builder);
             return builder;
         }
 
         public FactoryBinding.FactoryBindingBuilder BindFactory<T>() {
-            var builder =  new FactoryBinding.FactoryBindingBuilder(typeof(T), this);
+            var builder =  new FactoryBinding.FactoryBindingBuilder(typeof(T), BindingType.Factory, this);
             BindingBuilders.Add(builder);
             return builder;
         }
 
         public CollectionBinding.CollectionBindingBuilder BindMany<T>() where T : IEnumerable {
-            var builder =  new CollectionBinding.CollectionBindingBuilder(typeof(T), this);
+            var builder =  new CollectionBinding.CollectionBindingBuilder(typeof(T), BindingType.Collection, this);
             BindingBuilders.Add(builder);
             return builder;
         }

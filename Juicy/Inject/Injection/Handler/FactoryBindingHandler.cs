@@ -23,10 +23,6 @@ namespace Juicy.Inject.Injection.Handler {
             Creator = creator;
         }
 
-        bool IBindingHandler.CanHandle(IBinding binding) {
-            return binding is FactoryBinding;
-        }
-
         object IBindingHandler.Handle(IBinding binding, Type type, string name) {
             var factoryBinding = binding as FactoryBinding;
             bool isCached = Injector.IsCached(factoryBinding.BaseType, factoryBinding.Name);
@@ -40,12 +36,7 @@ namespace Juicy.Inject.Injection.Handler {
             return Injector.GetInstance(factoryBinding.BaseType, factoryBinding.Name);
         }
 
-        void IBindingHandler.Initialize(IBinding binding) {
-        }
-
-        bool IBindingHandler.NeedsInitialized(IBinding binding) {
-            return false;
-        }
+        void IBindingHandler.Initialize(IBinding binding) { }
 
         private object MakeProxy(Type proxyType, Type resultType) {
             // the proxy is able to mimic proxyType at runtime, which will be the injected value

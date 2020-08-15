@@ -23,10 +23,6 @@ namespace Juicy.Inject.Injection.Handler {
             Injector = injector;
         }
 
-        bool IBindingHandler.CanHandle(IBinding binding) {
-            return binding is CollectionBinding;
-        }
-
         object IBindingHandler.Handle(IBinding binding, Type type, string name) {
             var collectionBinding = binding as CollectionBinding;
             bool hitCache = collectionBinding.Scope == Constants.BindingScope.Singleton;
@@ -50,11 +46,6 @@ namespace Juicy.Inject.Injection.Handler {
             return Injector.GetInstance(collectionBinding.BaseType, collectionBinding.Name);
         }
 
-        void IBindingHandler.Initialize(IBinding binding) {
-        }
-
-        bool IBindingHandler.NeedsInitialized(IBinding binding) {
-            return false;
-        }
+        void IBindingHandler.Initialize(IBinding binding) { }
     }
 }

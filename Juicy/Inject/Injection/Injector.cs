@@ -1,4 +1,5 @@
-﻿using Juicy.Inject.Injection.Handler;
+﻿using Juicy.Constants;
+using Juicy.Inject.Injection.Handler;
 using Juicy.Inject.Injection.Provide;
 using Juicy.Inject.Storage;
 using Juicy.Interfaces.Binding;
@@ -20,13 +21,14 @@ namespace Juicy.Inject.Injection {
 
         internal ICache<Provider, Type, string> ProviderCache { get; }
 
-        private List<IBindingHandler> BindingHandlers { get; }
+        private Dictionary<BindingType, IBindingHandler> BindingHandlers { get; }
 
         private ICreator Creator { get; }
 
         private IMethodInvoker MethodInvoker { get; }
 
         private IMethodBindingFactory MethodBindingFactory { get; }
+
 
         /// <summary>
         /// Creates the injector, initializes binding handlers, and gets all module bindings.
@@ -42,12 +44,12 @@ namespace Juicy.Inject.Injection {
             MethodInvoker = new MethodInvoker(this, reflector);
             MethodBindingFactory = new MethodBindingFactory(this, reflector);
 
-            BindingHandlers = new List<IBindingHandler> {
-                new FactoryBindingHandler(this, Creator),
-                new ConcreteBindingHandler(this, Creator),
-                new CollectionBindingHandler(this),
-                new NoBindingHandler(this, Creator),
-                new MethodBindingHandler(this, MethodInvoker)
+            BindingHandlers = new Dictionary<BindingType, IBindingHandler> {
+                { BindingType.Collection, new CollectionBindingHandler(this) },
+                { BindingType.Concrete, new ConcreteBindingHandler(this, Creator) },
+                { BindingType.Factory, new FactoryBindingHandler(this, Creator) },
+                { BindingType.Method, new MethodBindingHandler(this, MethodInvoker) },
+                { BindingType.None, new NoBindingHandler(this, Creator) }
             };
 
             foreach (AbstractModule module in modules) {
@@ -59,11 +61,7 @@ namespace Juicy.Inject.Injection {
 
                 foreach (IBinding binding in bindings) {
                     CacheBinding(binding);
-                    foreach (IBindingHandler handler in BindingHandlers) {
-                        if (handler.CanHandle(binding) && handler.NeedsInitialized(binding)) {
-                            handler.Initialize(binding);
-                        }
-                    }
+                    BindingHandlers[binding.Type].Initialize(binding);
                 }
             }
         }
@@ -103,21 +101,7 @@ namespace Juicy.Inject.Injection {
         /// <param name="name">The name of the binding.</param>
         /// <returns>The object instance.</returns>
         internal object Get(IBinding binding, Type type, string name) {
-            object instance = null;
-            bool isHandled = false;
-            foreach (IBindingHandler handler in BindingHandlers) {
-                isHandled = handler.CanHandle(binding);
-                if (isHandled) {
-                    instance = handler.Handle(binding, type, name);
-                    break;
-                }
-            }
-
-            if (!isHandled) {
-                throw new InvalidOperationException($"Failed to handle binding for type {type.FullName}.");
-            }
-
-            return instance;
+            return BindingHandlers[binding?.Type ?? BindingType.None].Handle(binding, type, name);
         }
 
         /// <summary>

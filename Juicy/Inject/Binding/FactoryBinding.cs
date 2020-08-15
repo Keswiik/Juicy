@@ -1,4 +1,5 @@
-﻿using Juicy.Interfaces.Binding;
+﻿using Juicy.Constants;
+using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,15 @@ namespace Juicy.Inject.Binding {
 
     /// <inheritdoc cref="IFactoryBinding"/>
     public sealed class FactoryBinding : Binding, IFactoryBinding {
+
         public Type GenericType { get; }
 
         public Type ImplementationType { get; }
 
+        /// <summary>
+        /// Consumes builder to fill out attributes.
+        /// </summary>
+        /// <param name="component">The component to pull method information from.</param>
         private FactoryBinding(IFactoryBindingComponent component) : base(component) {
             GenericType = component.GenericType;
             ImplementationType = component.ImplementationType;
@@ -21,7 +27,9 @@ namespace Juicy.Inject.Binding {
 
         /// <inheritdoc/>
         private interface IFactoryBindingComponent : Binding.IBindingBuilderComponent {
+
             internal Type GenericType { get; }
+
             internal Type ImplementationType { get; }
         }
 
@@ -35,7 +43,7 @@ namespace Juicy.Inject.Binding {
 
             private Type ImplementationType { get; set; }
 
-            internal FactoryBindingComponent(Type type, IModule module) : base(type, module) { }
+            internal FactoryBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
             /// <summary>
             /// Specifiy the base type and implementation type of the factory.
@@ -54,7 +62,7 @@ namespace Juicy.Inject.Binding {
         /// Builder used to produce new factory bindings.
         /// </summary>
         public sealed class FactoryBindingBuilder : FactoryBindingComponent<FactoryBindingBuilder>, IBuilder {
-            internal FactoryBindingBuilder(Type type, IModule module) : base(type, module) { }
+            internal FactoryBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
             IBinding IBuilder.Build() {
                 return new FactoryBinding(this);

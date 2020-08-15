@@ -37,10 +37,6 @@ namespace Juicy.Inject.Injection.Handler {
             Creator = creator;
         }
 
-        bool IBindingHandler.CanHandle(IBinding binding) {
-            return binding == null;
-        }
-
         object IBindingHandler.Handle(IBinding binding, Type type, string name) {
             if (IsProvider(type)) {
                 var underlyingType = type.GetGenericArguments()[0];
@@ -70,12 +66,7 @@ namespace Juicy.Inject.Injection.Handler {
             }
         }
 
-        void IBindingHandler.Initialize(IBinding binding) {
-        }
-
-        bool IBindingHandler.NeedsInitialized(IBinding binding) {
-            return false;
-        }
+        void IBindingHandler.Initialize(IBinding binding) { }
 
         private bool IsProvider(Type type) {
             return type.IsGenericType && type.GetGenericTypeDefinition() == ProviderType;

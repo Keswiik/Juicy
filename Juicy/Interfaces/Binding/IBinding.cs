@@ -28,6 +28,11 @@ namespace Juicy.Interfaces.Binding {
         public BindingScope Scope { get; }
 
         /// <summary>
+        /// The type of the binding.
+        /// </summary>
+        public BindingType Type { get; }
+
+        /// <summary>
         /// The name of the binding. Can be <c>null</c>.
         /// </summary>
         /// <remarks>
