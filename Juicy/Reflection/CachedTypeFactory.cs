@@ -5,11 +5,19 @@ using System.Reflection;
 
  namespace Juicy.Reflection {
 
-    internal class CachedTypeFactory {
+    /// <summary>
+    /// Factory responsible for producing <b>all</b> cached type information used by the <see cref="Reflector"/>.
+    /// </summary>
+    internal sealed class CachedTypeFactory {
 
+        /// <summary>
+        /// Creates cached type information about <paramref name="type"/>.
+        /// </summary>
+        /// <param name="type">The type to create cached information about.</param>
+        /// <returns>The cached type.</returns>
         internal CachedType GetCachedType(Type type) {
             if (!type.IsClass) {
-                throw new InvalidOperationException(($"{type} is a invalid, cannot be a value-type or interface."));
+                throw new InvalidOperationException($"{type} is a invalid, cannot be a value-type or interface.");
             }
 
             CachedType.Builder builder = new CachedType.Builder() //

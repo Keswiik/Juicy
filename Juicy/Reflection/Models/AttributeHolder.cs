@@ -4,9 +4,16 @@ using System.Collections.Generic;
 
  namespace Juicy.Reflection.Models {
 
+    /// <summary>
+    /// Attribute holder that allows for extensible builders and inheritance.
+    /// </summary>
     internal class AttributeHolder : IAttributeHolder {
-        private Dictionary<Type, List<Attribute>> attributes;
+        private readonly Dictionary<Type, List<Attribute>> attributes;
 
+        /// <summary>
+        /// Internal constructor that allows for extensible builders to be used to construct subclasses.
+        /// </summary>
+        /// <param name="component">The component to pull attribute information from.</param>
         protected AttributeHolder(IAttributeHolderComponent component) {
             attributes = component.Attributes ?? new Dictionary<Type, List<Attribute>>();
         }
@@ -21,7 +28,7 @@ using System.Collections.Generic;
             Attribute selectedAttribute = GetAttribute(type);
             if (selectedAttribute == null) {
                 return null;
-            } else if (!type.IsAssignableFrom(selectedAttribute.GetType())) {
+            } else if (!type.IsAssignableFrom(selectedAttribute.GetType())) { // extra type checking to make sure we don't blow anything up.
                 throw new InvalidOperationException($"Attribute of type {selectedAttribute.GetType().Name} cannot be cast to type {type.Name}");
             }
 
@@ -35,7 +42,7 @@ using System.Collections.Generic;
             List<T> selectedAttributes = new List<T>();
 
             foreach (Attribute attribute in knownAttributes) {
-                if (!type.IsAssignableFrom(attribute.GetType())) {
+                if (!type.IsAssignableFrom(attribute.GetType())) { // extra type checking to make sure we don't blow anything up.
                     throw new InvalidOperationException($"Attribute of type {attribute.GetType().Name} cannot be cast to type {type.Name}");
                 }
 
@@ -68,25 +75,42 @@ using System.Collections.Generic;
 
         #region Builder
 
+        /// <summary>
+        /// Component to be extended in sublcasses to gain access to builder properties.
+        /// </summary>
         protected interface IAttributeHolderComponent {
             Dictionary<Type, List<Attribute>> Attributes { get; }
         }
 
+        /// <summary>
+        /// Builder logic used by subclasses to avoid re-implementing builder functionality downstream.
+        /// </summary>
+        /// <typeparam name="T">The type of the builder inheriting the component.</typeparam>
         internal class AttributeHolderComponent<T> : IAttributeHolderComponent
                 where T : AttributeHolderComponent<T> {
-            private readonly Dictionary<Type, List<Attribute>> attributes;
 
-            public AttributeHolderComponent() {
-                attributes = new Dictionary<Type, List<Attribute>>();
+            // TODO: implement interface explicitly to avoid exposing these to consumers.
+            public Dictionary<Type, List<Attribute>> Attributes { get; }
+
+            protected AttributeHolderComponent() {
+                Attributes = new Dictionary<Type, List<Attribute>>();
             }
 
-            public Dictionary<Type, List<Attribute>> Attributes => attributes;
-
+            /// <summary>
+            /// Adds an attribute to the container.
+            /// </summary>
+            /// <param name="attribute">The attribute to add.</param>
+            /// <returns>The builder.</returns>
             public T AddAttribute(Attribute attribute) {
                 AddOrCreateAttribute(attribute);
                 return this as T;
             }
 
+            /// <summary>
+            /// Adds multiple attributes to the container.
+            /// </summary>
+            /// <param name="attributes">The attributes to add.</param>
+            /// <returns>The builder.</returns>
             public T AddAttributes(params Attribute[] attributes) {
                 foreach (Attribute attribute in attributes) {
                     AddOrCreateAttribute(attribute);
@@ -97,15 +121,18 @@ using System.Collections.Generic;
 
             private void AddOrCreateAttribute(Attribute attribute) {
                 Type attributeType = attribute.GetType();
-                if (!attributes.ContainsKey(attributeType)) {
-                    attributes[attributeType] = new List<Attribute>();
+                if (!Attributes.ContainsKey(attributeType)) {
+                    Attributes[attributeType] = new List<Attribute>();
                 }
 
-                attributes[attributeType].Add(attribute);
+                Attributes[attributeType].Add(attribute);
             }
         }
 
-        public class Builder : AttributeHolderComponent<Builder>, IBuilder<AttributeHolder> {
+        /// <summary>
+        /// The builder used to produce new attribute holders.
+        /// </summary>
+        public sealed class Builder : AttributeHolderComponent<Builder>, IBuilder<AttributeHolder> {
 
             public AttributeHolder Build() {
                 return new AttributeHolder(this);

@@ -5,6 +5,7 @@ using System;
 
 namespace Juicy.Inject.Binding {
 
+    ///<inheritdoc cref="IBinding"/>
     public class Binding : IBinding {
         public Type BaseType { get; }
 
@@ -14,13 +15,22 @@ namespace Juicy.Inject.Binding {
 
         public IModule Module { get; }
 
-        protected Binding(IBindingBuilderComponent builderComponent) {
-            BaseType = builderComponent.BaseType;
-            Scope = builderComponent.BindingScope;
-            Name = builderComponent.Name;
-            Module = builderComponent.Module;
+        /// <summary>
+        /// Internal constructor that allows for extensible builders to be used to construct subclasses.
+        /// </summary>
+        /// <param name="component">The component to pull attribute information from.</param>
+        protected Binding(IBindingBuilderComponent component) {
+            BaseType = component.BaseType;
+            Scope = component.BindingScope;
+            Name = component.Name;
+            Module = component.Module;
         }
 
+        #region Builder
+
+        /// <summary>
+        /// Component to be extended in sublcasses to gain access to builder properties.
+        /// </summary>
         public interface IBindingBuilderComponent {
             internal Type BaseType { get; }
 
@@ -31,7 +41,11 @@ namespace Juicy.Inject.Binding {
             internal string Name { get; }
         }
 
-        public abstract class BindingBuilderComponent<T> : IBindingBuilderComponent where T : class, IBindingBuilderComponent {
+        /// <summary>
+        /// Builder logic used by subclasses to avoid re-implementing builder functionality downstream.
+        /// </summary>
+        /// <typeparam name="T">The type of the builder inheriting the component.</typeparam>
+        public abstract class BindingComponent<T> : IBindingBuilderComponent where T : BindingComponent<T>, IBindingBuilderComponent {
             Type IBindingBuilderComponent.BaseType => BaseType;
 
             IModule IBindingBuilderComponent.Module => Module;
@@ -48,23 +62,36 @@ namespace Juicy.Inject.Binding {
 
             protected string Name { get; set; }
 
-            internal BindingBuilderComponent(Type type, IModule module) {
+            internal BindingComponent(Type type, IModule module) {
                 BaseType = type;
                 Module = module;
             }
 
+            /// <summary>
+            /// Sets the scope of the binding.
+            /// </summary>
+            /// <param name="scope">The scope of the binding.</param>
+            /// <returns>The builder.</returns>
             public T In(BindingScope scope) {
                 BindingScope = scope;
                 return this as T;
             }
 
+            /// <summary>
+            /// Sets the name of the binding.
+            /// </summary>
+            /// <param name="name">The name of the binding.</param>
+            /// <returns>The builder.</returns>
             public T Named(string name) {
                 Name = name;
                 return this as T;
             }
         }
 
-        public class BindingBuilder : BindingBuilderComponent<BindingBuilder>, IBuilder {
+        /// <summary>
+        /// True "implementation" of the builder that will be used externally.
+        /// </summary>
+        public class BindingBuilder : BindingComponent<BindingBuilder>, IBuilder {
 
             internal BindingBuilder(Type type, IModule module) : base(type, module) {
             }
@@ -73,5 +100,7 @@ namespace Juicy.Inject.Binding {
                 return new Binding(this);
             }
         }
+
+        #endregion
     }
 }

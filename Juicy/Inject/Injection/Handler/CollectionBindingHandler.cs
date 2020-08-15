@@ -7,11 +7,19 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
+
+    /// <summary>
+    /// Handler used to create injections based on <see cref="CollectionBinding"/>.
+    /// </summary>
     internal class CollectionBindingHandler : IBindingHandler {
 
         private Injector Injector { get; }
 
-        public CollectionBindingHandler(Injector injector) {
+        /// <summary>
+        /// Create a new binding handler with the specified parent <paramref name="injector"/>.
+        /// </summary>
+        /// <param name="injector">The parent injector to use.</param>
+        internal CollectionBindingHandler(Injector injector) {
             Injector = injector;
         }
 
@@ -25,6 +33,7 @@ namespace Juicy.Inject.Injection.Handler {
             bool isCached = Injector.IsCached(collectionBinding.BaseType, collectionBinding.Name);
 
             if (!hitCache || !isCached) {
+                // TODO: determine if I am going to be lynched for doing this. I don't know how bad dynamic is for performance.
                 dynamic collection = Activator.CreateInstance(collectionBinding.BaseType);
                 foreach (Type implementationType in collectionBinding.ImplementationTypes) {
                     dynamic value = Injector.Get(implementationType);

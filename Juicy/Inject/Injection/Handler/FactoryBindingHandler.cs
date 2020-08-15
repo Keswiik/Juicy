@@ -7,6 +7,10 @@ using System.Reflection;
 using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
+
+    /// <summary>
+    /// Handler used to create injections based on <see cref="FactoryBinding"/>.
+    /// </summary>
     internal class FactoryBindingHandler : IBindingHandler {
         private readonly static MethodInfo CreateProxyMethod = typeof(DispatchProxy).GetMethod("Create");
 
@@ -44,6 +48,7 @@ namespace Juicy.Inject.Injection.Handler {
         }
 
         private object MakeProxy(Type proxyType, Type resultType) {
+            // the proxy is able to mimic proxyType at runtime, which will be the injected value
             FactoryProxy instance = (FactoryProxy)CreateProxyMethod.MakeGenericMethod(proxyType, typeof(FactoryProxy)) //
                 .Invoke(null, new object[] { });
             instance.Creator = Creator;

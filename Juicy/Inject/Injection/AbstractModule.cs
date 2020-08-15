@@ -7,6 +7,10 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Juicy.Inject.Injection {
+
+    /// <summary>
+    /// Base module all consumers should inherit from.
+    /// </summary>
     public abstract class AbstractModule : IModule {
 
         internal List<IBuilder> BindingBuilders { get; }
@@ -33,6 +37,9 @@ namespace Juicy.Inject.Injection {
             return builder;
         }
 
+        /// <summary>
+        /// All explicit bindings using <see cref="Bind{T}"/>, <see cref="BindFactory{T}"/>, or <see cref="BindMany{T}"/> should be added in the override of this method.
+        /// </summary>
         public abstract void Configure();
 
         internal List<IBinding> GetBindings() {

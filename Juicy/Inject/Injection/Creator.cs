@@ -10,13 +10,23 @@ using System.Reflection;
 using System.Text;
 
 namespace Juicy.Inject.Injection {
+
+    /// <inheritdoc cref="ICreator"/>
     internal class Creator : ICreator {
+
         private Injector Injector { get; }
+
         private Reflector Reflector { get; }
 
         private ICache<List<ICachedParameter>, Type, string> ParameterMapping { get; }
+
         private ICache<List<ICachedParameter>, Type, string> InjectableParametersMapping { get; }
 
+        /// <summary>
+        /// Create an instance with the specified parent injector and reflector.
+        /// </summary>
+        /// <param name="injector">The parent injector for fetching parameter instances.</param>
+        /// <param name="reflector">The reflector used to get method information.</param>
         internal Creator(Injector injector, Reflector reflector) {
             Injector = injector;
             Reflector = reflector;
@@ -31,12 +41,16 @@ namespace Juicy.Inject.Injection {
                 return Reflector.Instantiate(type);
             } else if (selectedConstructor.Parameters.Count > 0) {
                 var parameters = new object[selectedConstructor.Parameters.Count];
+
+                // TODO: maybe sort the parameters when I cache them to avoid needing to do this nonsense
+                // match the parameters with their position in the map
                 for (int i = 0; i < parameters.Length; i++) {
                     var parameter = selectedConstructor.Parameters.Find(p => p.Position == i);
                     if (parameter == null) {
                         throw new InvalidOperationException($"Failed to locate the parameter at position {i} in type {type}.");
                     }
 
+                    // TODO: simplify
                     if (parameter.HasAttribute(typeof(NamedAttribute))) {
                         var attribute = parameter.GetAttribute<NamedAttribute>();
                         if (!string.IsNullOrWhiteSpace(attribute?.Name)) {
@@ -67,20 +81,24 @@ namespace Juicy.Inject.Injection {
                 InjectableParametersMapping.Get(type) : //
                 new List<ICachedParameter>(constructor.Parameters);
             if (ParameterMapping.IsCached(type)) {
+                // assigned mapped external parameters to their position in the parameters array
                 var mapping = ParameterMapping.Get(type);
                 for (int i = 0; i < mapping.Count; i++) {
                     parameters[mapping[i].Position] = args[i].Value;
                 }
             } else {
+                // go through all known method parameters
                 var mapping = new List<ICachedParameter>();
                 for (int i = 0; i < args.Length; i++) {
                     var argType = args[i].Value.GetType();
                     bool foundParameter = false;
                     foreach (var parameter in constructor.Parameters) {
                         var parameterName = parameter.GetAttribute<NamedAttribute>()?.Name;
+                        // map parameters if they having matching type and name
                         if (parameter.Type.IsAssignableFrom(argType) && args[i].Name == parameterName) {
                             foundParameter = true;
                             mapping.Add(parameter);
+                            // also assign the values to avoid doing this elsewhere
                             parameters[mapping[i].Position] = args[i].Value;
                             injectableParameters.Remove(parameter);
                         }
@@ -90,10 +108,12 @@ namespace Juicy.Inject.Injection {
                     }
                 }
 
+                // cache parameter mapping for the next invocation of this type
                 ParameterMapping.Cache(mapping, type);
                 InjectableParametersMapping.Cache(injectableParameters, type);
             }
 
+            // map injected parameters
             foreach (var injectableParameter in injectableParameters) {
                 var name = injectableParameter.GetAttribute<NamedAttribute>()?.Name;
                 parameters[injectableParameter.Position] = name != null ? //

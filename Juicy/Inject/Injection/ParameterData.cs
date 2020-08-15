@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Juicy.Inject.Injection {
+
+    /// <inheritdoc cref="IParameterData"/>
     internal class ParameterData : IParameterData {
         string IParameterData.Name => Name;
 

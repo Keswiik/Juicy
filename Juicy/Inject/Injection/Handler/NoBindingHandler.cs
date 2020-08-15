@@ -8,15 +8,30 @@ using System.Reflection;
 using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
+
+    /// <summary>
+    /// Handler used to create injections when no binding is available.
+    /// </summary>
+    /// <remarks>
+    /// Usage of this handler usually involves injecting either <see cref="IProvider{T}"/> or a concrete class with no explicit binding specified.
+    /// </remarks>
     internal class NoBindingHandler : IBindingHandler {
+
         private readonly static Type ProviderType = typeof(IProvider<>);
+
         private readonly static Type ParameterizedProviderType = typeof(ParameterizedProvider<>);
+
         private const BindingFlags ProviderBindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
 
         private Injector Injector { get; }
 
         private ICreator Creator { get; }
 
+        /// <summary>
+        /// Creates a handler with the specified parent injector and creator.
+        /// </summary>
+        /// <param name="injector">The parent injector to use.</param>
+        /// <param name="creator">The creator to use.</param>
         internal NoBindingHandler(Injector injector, ICreator creator) {
             Injector = injector;
             Creator = creator;
@@ -31,6 +46,8 @@ namespace Juicy.Inject.Injection.Handler {
                 var underlyingType = type.GetGenericArguments()[0];
                 binding = Injector.GetBinding(underlyingType, name);
 
+                // providers should ALWAYS be cached after they are created. No reason to create multiple for the same type.
+                // they will delegate to the same binding anyways.
                 if (!Injector.ProviderCache.IsCached(type)) {
                     var cacheInstance = binding?.Scope == BindingScope.Singleton;
                     var provider = (Provider)Activator.CreateInstance(ParameterizedProviderType //
@@ -46,6 +63,7 @@ namespace Juicy.Inject.Injection.Handler {
                     Injector.ProviderCache.Get(type, name) : //
                     Injector.ProviderCache.Get(type);
             } else if (!type.IsInterface && !type.IsAbstract && !type.IsValueType) {
+                // if it isn't a provider, and is a concrete class...we'll give it a try.
                 return Creator.CreateInstance(type);
             } else {
                 throw new InvalidOperationException($"Cannot create an instance of type {type.FullName} that has no binding");
