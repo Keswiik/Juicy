@@ -1,4 +1,5 @@
-﻿using Juicy.Reflection.Interfaces;
+﻿using Juicy.Inject.Binding.Attributes;
+using Juicy.Reflection.Interfaces;
 using System;
 
  namespace Juicy.Reflection.Models {
@@ -13,11 +14,16 @@ using System;
         private CachedParameter(ICachedParameterComponent component) : base(component) {
             Type = component._Type;
             Position = component._Position;
+
+            // find attribute information
+            Name = GetAttribute<NamedAttribute>()?.Name;
         }
 
         public Type Type { get; }
 
         public int Position { get; }
+
+        public string Name { get; }
 
         #region Builder
 

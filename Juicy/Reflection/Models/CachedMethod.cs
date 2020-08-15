@@ -1,4 +1,6 @@
-﻿using Juicy.Reflection.Interfaces;
+﻿using Juicy.Constants;
+using Juicy.Inject.Binding.Attributes;
+using Juicy.Reflection.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,11 +12,17 @@ using System.Reflection;
 
         private readonly MethodBase methodBase;
 
-        private List<ICachedParameter> parameters;
+        public List<ICachedParameter> Parameters { get; }
 
         public string Name { get; }
 
+        public string BindingName { get; }
+
         public Type ReturnType { get; }
+
+        public bool Provides { get; }
+
+        public BindingScope Scope { get; }
 
         /// <summary>
         /// Consumes builder to fill out attributes.
@@ -25,13 +33,11 @@ using System.Reflection;
             ReturnType = component._ReturnType;
             Parameters = component._Parameters;
             methodBase = component._MethodBase;
-        }
 
-        // TODO: remove the unneeded new list creation
-        public List<ICachedParameter> Parameters {
-            get => new List<ICachedParameter>(parameters);
-
-            set => parameters = value;
+            // find attribute information
+            BindingName = GetAttribute<NamedAttribute>()?.Name;
+            Provides = HasAttribute(typeof(ProvidesAttribute));
+            Scope = GetAttribute<ScopeAttribute>()?.Scope ?? BindingScope.Instance;
         }
 
         public T Invoke<T>(object instance, params object[] args) {

@@ -93,9 +93,8 @@ namespace Juicy.Inject.Injection {
                     var argType = args[i].Value.GetType();
                     bool foundParameter = false;
                     foreach (var parameter in constructor.Parameters) {
-                        var parameterName = parameter.GetAttribute<NamedAttribute>()?.Name;
                         // map parameters if they having matching type and name
-                        if (parameter.Type.IsAssignableFrom(argType) && args[i].Name == parameterName) {
+                        if (parameter.Type.IsAssignableFrom(argType) && args[i].Name == parameter.Name) {
                             foundParameter = true;
                             mapping.Add(parameter);
                             // also assign the values to avoid doing this elsewhere
@@ -115,31 +114,20 @@ namespace Juicy.Inject.Injection {
 
             // map injected parameters
             foreach (var injectableParameter in injectableParameters) {
-                var name = injectableParameter.GetAttribute<NamedAttribute>()?.Name;
-                parameters[injectableParameter.Position] = Injector.Get(injectableParameter.Type, name);
+                parameters[injectableParameter.Position] = Injector.Get(injectableParameter.Type, injectableParameter.Name);
             }
 
             return Reflector.Instantiate(type, parameters);
         }
 
         private ICachedMethod GetConstructor(Type type) {
-            ICachedMethod selectedConstructor = null;
-            List<ICachedMethod> constructors = Reflector.GetAttributedConstructors(type, typeof(InjectAttribute));
-            if (constructors.Count > 1) {
-                throw new InvalidOperationException($"Cannot create an instance of {type}, multiple constructors are annotated with [Inject]");
-            } else if (constructors.Count == 1) {
-                selectedConstructor = constructors[0];
-            }
+            ICachedMethod constructor = Reflector.GetInjectableConstructor(type);
 
-            if (selectedConstructor == null) {
-                selectedConstructor = Reflector.GetDefaultConstructor(type);
-            }
-
-            if (selectedConstructor == null) {
+            if (constructor == null) {
                 throw new InvalidOperationException($"No injectable constructors found for the type {type}");
             }
 
-            return selectedConstructor;
+            return constructor;
         }
     }
 }

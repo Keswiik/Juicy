@@ -101,17 +101,9 @@ namespace Juicy.Reflection {
             return methods;
         }
 
-        /// <summary>
-        /// Gets all constructors attributed with <paramref name="attribute"/>
-        /// </summary>
-        /// <param name="type">The type to find constructors within.</param>
-        /// <param name="attribute">The attribute to look for.</param>
-        /// <returns></returns>
-        public List<ICachedMethod> GetAttributedConstructors(Type type, Type attribute)
-        {
+        public ICachedMethod GetInjectableConstructor(Type type) {
             CacheType(type);
-
-            return typeCache[type].Constructors.FindAll(c => c.HasAttribute(attribute));
+            return typeCache[type].InjectableConstructor;
         }
 
         /// <summary>

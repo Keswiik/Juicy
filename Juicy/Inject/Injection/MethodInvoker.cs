@@ -33,8 +33,7 @@ namespace Juicy.Inject.Injection {
 
             var parameters = new object[method.Parameters.Count];
             foreach (ICachedParameter parameter in method.Parameters) {
-                var name = parameter.GetAttribute<NamedAttribute>()?.Name;
-                parameters[parameter.Position] = Injector.Get(parameter.Type, name);
+                parameters[parameter.Position] = Injector.Get(parameter.Type, parameter.Name);
             }
 
             return Reflector.Invoke(method, instance, parameters);

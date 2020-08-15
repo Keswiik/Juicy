@@ -20,5 +20,13 @@ using System.Text;
         /// The position of the parameter.
         /// </summary>
         int Position { get; }
+
+        /// <summary>
+        /// The name of the parameter.
+        /// </summary>
+        /// <remarks>
+        /// Only applicable for parameters that are used in named injections.
+        /// </remarks>
+        string Name { get; }
     }
 }
