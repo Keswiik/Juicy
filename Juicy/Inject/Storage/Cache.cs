@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 
  namespace Juicy.Inject.Storage {
-    internal class Cache<T, K, N> : ICache<T, K, N> {
+
+    /// <inheritdoc cref="ICache{T, K, N} "/>
+    internal sealed class Cache<T, K, N> : ICache<T, K, N> {
 
         private Dictionary<K, IGroupedCache<T, N>> Dictionary { get; }
 

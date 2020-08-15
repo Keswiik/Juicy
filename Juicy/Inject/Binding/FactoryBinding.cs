@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Juicy.Inject.Binding {
+
+    /// <inheritdoc cref="IFactoryBinding"/>
     public sealed class FactoryBinding : Binding, IFactoryBinding {
         public Type GenericType { get; }
 
@@ -15,12 +17,16 @@ namespace Juicy.Inject.Binding {
             ImplementationType = component.ImplementationType;
         }
 
-        public interface IFactoryBindingComponent : Binding.IBindingBuilderComponent {
+        #region Builder
+
+        /// <inheritdoc/>
+        private interface IFactoryBindingComponent : Binding.IBindingBuilderComponent {
             internal Type GenericType { get; }
             internal Type ImplementationType { get; }
         }
 
-        public abstract class FactoryBindingComponent<T> : BindingBuilderComponent<T>, IFactoryBindingComponent where T : class, IFactoryBindingComponent {
+        /// <inheritdoc/>
+        public abstract class FactoryBindingComponent<T> : BindingComponent<T>, IFactoryBindingComponent where T : FactoryBindingComponent<T> {
             Type IFactoryBindingComponent.GenericType => GenericType;
 
             Type IFactoryBindingComponent.ImplementationType => ImplementationType;
@@ -31,6 +37,12 @@ namespace Juicy.Inject.Binding {
 
             internal FactoryBindingComponent(Type type, IModule module) : base(type, module) { }
 
+            /// <summary>
+            /// Specifiy the base type and implementation type of the factory.
+            /// </summary>
+            /// <typeparam name="G">The base type being implemented.</typeparam>
+            /// <typeparam name="I">The implementation that will be produced by the factory.</typeparam>
+            /// <returns>The builder.</returns>
             public T Implement<G, I>() where I : G {
                 GenericType = typeof(G);
                 ImplementationType = typeof(I);
@@ -38,6 +50,9 @@ namespace Juicy.Inject.Binding {
             }
         }
 
+        /// <summary>
+        /// Builder used to produce new factory bindings.
+        /// </summary>
         public sealed class FactoryBindingBuilder : FactoryBindingComponent<FactoryBindingBuilder>, IBuilder {
             internal FactoryBindingBuilder(Type type, IModule module) : base(type, module) { }
 
@@ -45,5 +60,7 @@ namespace Juicy.Inject.Binding {
                 return new FactoryBinding(this);
             }
         }
+
+        #endregion
     }
 }

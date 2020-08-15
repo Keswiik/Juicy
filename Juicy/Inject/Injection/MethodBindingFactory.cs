@@ -11,10 +11,14 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Juicy.Inject.Injection {
+
+    /// <inheritdoc cref="IMethodBindingFactory"/>
     internal class MethodBindingFactory : IMethodBindingFactory {
+
         private static readonly Type ProvidesAttributeType = typeof(ProvidesAttribute);
 
         private Injector Injector { get; }
+
         private Reflector Reflector { get; }
 
         internal MethodBindingFactory(Injector injector, Reflector reflector) {
@@ -36,9 +40,7 @@ namespace Juicy.Inject.Injection {
 
                 if (name != null && string.IsNullOrWhiteSpace(name)) {
                     throw new InvalidOperationException($"Invalid empty or whitespace name on provider method named {method.Name} in {module.GetType().FullName}.");
-                }
-
-                if (name != null && Injector.BindingCache.IsCached(baseType, name)) {
+                } else if (name != null && Injector.BindingCache.IsCached(baseType, name)) {
                     throw new InvalidOperationException($"Named binding from provider method named {method.Name} in {module.GetType().FullName} conflicts with an existing binding of name {name}.");
                 } else if (name == null && Injector.BindingCache.IsCached(baseType)) {
                     throw new InvalidOperationException($"Binding from provided method named {method.Name} in {module.GetType().FullName} conflicts with an existing binding.");

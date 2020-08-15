@@ -6,12 +6,21 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
+
+    /// <summary>
+    /// Handler used to create injections based on <see cref="MethodBinding"/>.
+    /// </summary>
     internal class MethodBindingHandler : IBindingHandler {
 
         private Injector Injector { get; }
 
         private IMethodInvoker MethodInvoker { get; }
 
+        /// <summary>
+        /// Creates a new handler with the specified parent injector and method invoker.
+        /// </summary>
+        /// <param name="injector">The parent injector to use.</param>
+        /// <param name="methodInvoker">The method invoker to use.</param>
         internal MethodBindingHandler(Injector injector, IMethodInvoker methodInvoker) {
             Injector = injector;
             MethodInvoker = methodInvoker;
