@@ -14,7 +14,9 @@ namespace Reflector {
             IInjector injector = Juicer.CreateInjector(new TestModule());
 
             IService service = injector.Get<IService>();
+            ServiceImpl service2 = injector.Get<ServiceImpl>();
             service.DoThing();
+            Console.WriteLine($"Same instance of service when using untargeted vs targeted binding: {service == service2}.");
 
             Console.WriteLine();
             Console.WriteLine($"Number from IService: {service.GetNumber()}");

@@ -11,6 +11,8 @@ namespace TestProject.Code {
             Bind<IService>() //
                 .To<ServiceImpl>() //
                 .In(BindingScope.Singleton);
+            Bind<ServiceImpl>() //
+                .In(BindingScope.Singleton);
             BindMany<HashSet<IMultiImplService>>() //
                 .To<MultiImplService1>() //
                 .To<MultiImplService2>();

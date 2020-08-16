@@ -8,7 +8,7 @@ public sealed class Module : AbstractModule {
     public void Configure() {
         Bind<IService>()
             .To<ServiceImpl>()
-            .In(BindingScopes.Singleton);
+            .In(BindingScope.Singleton);
         Bind<int>()
             .ToInstance(5)
             .Named("toDouble");

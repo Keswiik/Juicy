@@ -8,7 +8,7 @@ Allows you to define what implementation of type you will use, but lets the inje
 ```csharp
 Bind<IService>()
     .To<ServiceImpl>()
-    .In(BindingScopes.Singleton);
+    .In(BindingScope.Singleton);
 
 ...
 
@@ -22,6 +22,15 @@ public sealed class ServiceConsumer {
 }
 ```
 Trying to use type bindings with value-types **WILL** result in errors.
+
+### Untargeted
+An untargeted binding specifies a concrete class when calling `Bind<T>()`. This can be used to make the injector aware of a type and modify the scope or name of the binding.
+
+```csharp
+Bind<ServiceImpl>()
+    .In(BindingScope.Singleton);
+```
+**Note: These _can_ be used in conjunction with normal bindings. They will, however, both share the same cache if set to be singletons. Instances are cached based on the implementation type.**
 
 ## Instance
 Bind to a specific instance of a type. This is primarily used when binding to primitives.

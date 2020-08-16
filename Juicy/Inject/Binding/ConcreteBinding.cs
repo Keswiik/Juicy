@@ -21,6 +21,11 @@ namespace Juicy.Inject.Binding {
         private ConcreteBinding(IConcreteBindingComponent component) : base(component) {
             ImplementationType = component.ImplementationType;
             Instance = component.Instance;
+
+            // check for untargeted bindings and update accordingly
+            if (Instance == null && ImplementationType == null) {
+                ImplementationType = BaseType;
+            }
         }
 
         /// <inheritdoc/>
