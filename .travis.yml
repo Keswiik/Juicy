@@ -1,7 +1,7 @@
 jobs:
   include:
     - name: github-pages
-      # if: branch = master
+      if: branch = master
       language: python
       install:
         - pip install mkdocs mkdocs-material
@@ -14,4 +14,4 @@ jobs:
         keep_history: true
         local_dir: ./site
         on:
-          branch: JCY-13
+          branch: master
