@@ -1,0 +1,46 @@
+site_name: Juicy Documentation
+theme:
+  name: material
+  language: 'en'
+  palette:
+    scheme: slate
+    primary: deep purple
+  features:
+    - tabs
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+plugins:
+  - search
+markdown_extensions:
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tilde
+  - pymdownx.tabbed
+  - admonition
+  - footnotes
+  - toc:
+      permalink: true
+
+nav:
+  - 'Getting Started': index.md
+  - Bindings:
+    - Overview: bindings/overview.md
+    - Explicit: bindings/explicit.md
+    - Collections: bindings/collections.md
+    - Factories: bindings/factories.md
+    - Methods: bindings/methods.md
