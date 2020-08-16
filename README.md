@@ -1,6 +1,4 @@
 # Juicy
-Latest release: **none**
-
 [Documentation](https://keswiik.github.io/Juicy/)
 
 Juicy is a lightweight recreation of Google's [Guice](https://github.com/google/guice) dependency injection library in C#.
