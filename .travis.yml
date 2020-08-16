@@ -13,3 +13,5 @@ jobs:
         skip_cleanup: true
         keep_history: true
         local_dir: ./site
+        on:
+          branch: JCY-13
