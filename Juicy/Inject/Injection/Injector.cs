@@ -1,4 +1,5 @@
 ﻿using Juicy.Constants;
+using Juicy.Inject.Binding;
 using Juicy.Inject.Injection.Handler;
 using Juicy.Inject.Injection.Provide;
 using Juicy.Inject.Storage;
@@ -64,6 +65,15 @@ namespace Juicy.Inject.Injection {
                     BindingHandlers[binding.Type].Initialize(binding);
                 }
             }
+
+            // create a binding for the injector itself after everything has gone through
+            // binding is weird as it has no module, but this should never cause an error
+            var injectorBinding = (new ConcreteBinding.ConcreteBindingBuilder(typeof(IInjector), BindingType.Concrete, null)
+                .ToInstance(this)
+                .In(BindingScope.Singleton) as IBuilder)
+                .Build();
+            CacheBinding(injectorBinding);
+            BindingHandlers[injectorBinding.Type].Initialize(injectorBinding);
         }
 
         public T Get<T>() {

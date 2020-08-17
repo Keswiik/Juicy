@@ -12,7 +12,10 @@ namespace Reflector {
 
         private static void Main(string[] args) {
             IInjector injector = Juicer.CreateInjector(new TestModule());
+            IInjector injector2 = injector.Get<IInjector>();
+            Console.WriteLine($"Injector was able to inject itself: {injector == injector2}.");
 
+            Console.WriteLine();
             IService service = injector.Get<IService>();
             ServiceImpl service2 = injector.Get<ServiceImpl>();
             service.DoThing();
