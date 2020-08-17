@@ -1,4 +1,6 @@
 site_name: Juicy Documentation
+repo_url: https://github.com/Keswiik/Juicy
+repo_name: keswiik/juicy
 theme:
   name: material
   language: 'en'

@@ -35,17 +35,17 @@ namespace Juicy.Inject.Injection {
         }
 
         object ICreator.CreateInstance(Type type) {
-            ICachedMethod selectedConstructor = GetConstructor(type);
+            ICachedMethod constructor = GetConstructor(type);
 
-            if (selectedConstructor.Parameters.Count == 0) {
-                return Reflector.Instantiate(type);
-            } else if (selectedConstructor.Parameters.Count > 0) {
-                var parameters = new object[selectedConstructor.Parameters.Count];
+            if (constructor.Parameters.Count == 0) {
+                return Reflector.Invoke(constructor, null);
+            } else if (constructor.Parameters.Count > 0) {
+                var parameters = new object[constructor.Parameters.Count];
 
                 // TODO: maybe sort the parameters when I cache them to avoid needing to do this nonsense
                 // match the parameters with their position in the map
                 for (int i = 0; i < parameters.Length; i++) {
-                    var parameter = selectedConstructor.Parameters.Find(p => p.Position == i);
+                    var parameter = constructor.Parameters.Find(p => p.Position == i);
                     if (parameter == null) {
                         throw new InvalidOperationException($"Failed to locate the parameter at position {i} in type {type}.");
                     }
@@ -61,7 +61,7 @@ namespace Juicy.Inject.Injection {
                     }
                 }
 
-                return Reflector.Instantiate(type, parameters);
+                return Reflector.Invoke(constructor, null, parameters);
             }
 
             throw new InvalidOperationException($"Something horrible went wrong, could not create an instance of the type {type}.");
@@ -117,7 +117,7 @@ namespace Juicy.Inject.Injection {
                 parameters[injectableParameter.Position] = Injector.Get(injectableParameter.Type, injectableParameter.Name);
             }
 
-            return Reflector.Instantiate(type, parameters);
+            return Reflector.Invoke(constructor, null, parameters);
         }
 
         private ICachedMethod GetConstructor(Type type) {
