@@ -270,6 +270,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#creating-child-injectors" class="md-nav__link">
+    Creating Child Injectors
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -411,6 +418,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#creating-child-injectors" class="md-nav__link">
+    Creating Child Injectors
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -498,7 +512,34 @@
 <span class="p">}</span>
 </code></pre></div>
 
+<h2 id="creating-child-injectors">Creating Child Injectors<a class="headerlink" href="#creating-child-injectors" title="Permanent link">&para;</a></h2>
+<p>Child injectors contain their own bindings, but will delegate to the injector that created them if a requested type has no bindings. This can be useful in situations where an implementation cannot be decided until after startup and requires additional dependencies to be installed.</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Module</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
+<span class="na">    [Provides]</span>
+<span class="na">    [Scope(BindingScope.Singleton)]</span>
+    <span class="n">DbConnection</span> <span class="nf">ProvideDbConnection</span><span class="p">(</span><span class="kt">string</span> <span class="n">connectionType</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">IInjector</span> <span class="n">injector</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">connectionType</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="s">&quot;sqlite&quot;</span><span class="p">:</span>
+                <span class="n">injector</span> <span class="p">=</span> <span class="n">CreateChildInjector</span><span class="p">(</span><span class="k">new</span> <span class="n">SqliteModule</span><span class="p">());</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s">&quot;postgres&quot;</span><span class="p">:</span>
+                <span class="n">injector</span> <span class="p">=</span> <span class="n">CreateChildInjector</span><span class="p">(</span><span class="k">new</span> <span class="n">PostgresModule</span><span class="p">());</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s">&quot;mysql&quot;</span><span class="p">:</span>
+                <span class="n">injector</span> <span class="p">=</span> <span class="n">CreateChildInjector</span><span class="p">(</span><span class="k">new</span> <span class="n">MysqlModule</span><span class="p">());</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="p">:</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">&quot;Could not determine DbConnection type.&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">injector</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">DbConnection</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
 <p><sub><sub><sub>I know the examples are bad, but hopefully they get the idea across.</sub></sub></sub></p>
+<p><sup><sup><sup><sup>Especially that last example.</sup></sup></sup></sup></p>
                 
               
               
