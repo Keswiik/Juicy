@@ -37,14 +37,22 @@ namespace Juicy.Inject.Injection.Handler {
             Creator = creator;
         }
 
+        /*
+         * How this method works:
+         *      If a provider was requested
+         *          create the provider if we don't have it cached
+         *          return the provider
+         *      If it isn't a provider, and we have a parent injector, pass the request up
+         *      If we have no parent injector and the request is for a a non-value type that is can be created, try to create it
+         */
         object IBindingHandler.Handle(IBinding binding, Type type, string name) {
             if (IsProvider(type)) {
-                var underlyingType = type.GetGenericArguments()[0];
-                binding = Injector.GetBinding(underlyingType, name);
 
                 // providers should ALWAYS be cached after they are created. No reason to create multiple for the same type.
                 // they will delegate to the same binding anyways.
                 if (!Injector.ProviderCache.IsCached(type)) {
+                    var underlyingType = type.GetGenericArguments()[0];
+                    binding = Injector.GetBinding(underlyingType, name);
                     var cacheInstance = binding?.Scope == BindingScope.Singleton;
                     var provider = (Provider)Activator.CreateInstance(ParameterizedProviderType //
                         .MakeGenericType(underlyingType), ProviderBindingFlags, null, new object[] { cacheInstance, this }, null);
@@ -58,6 +66,8 @@ namespace Juicy.Inject.Injection.Handler {
                 return (name != null) ? //
                     Injector.ProviderCache.Get(type, name) : //
                     Injector.ProviderCache.Get(type);
+            } else if (Injector.ParentInjector != null) {
+                return Injector.ParentInjector.Get(type, name);
             } else if (!type.IsInterface && !type.IsAbstract && !type.IsValueType) {
                 // if it isn't a provider, and is a concrete class...we'll give it a try.
                 return Creator.CreateInstance(type);
