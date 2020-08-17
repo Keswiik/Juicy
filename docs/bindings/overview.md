@@ -32,7 +32,7 @@ public sealed class BadModule : AbstractModule {
     public void Configure() {
         Bind<IService>()
             .To<ServiceImpl>()
-            .In(BindingScopes.Singleton);
+            .In(BindingScope.Singleton);
         Bind<int>()
             .ToInstance(8000)
             .Named("port");
@@ -65,7 +65,7 @@ These can be useful in situations where:
 ```csharp
 Bind<IService>()
     .To<ServiceImpl>()
-    .In(BindingScopes.Singleton);
+    .In(BindingScope.Singleton);
 
 ...
 
