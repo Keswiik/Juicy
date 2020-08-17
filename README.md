@@ -10,4 +10,3 @@ This project is not yet complete and is missing several features from Guice.
 - Overriding bindings of another module
 - Installing dependent modules
 - Injector hierarchy / child injectors
-- Allow injector to inject itself

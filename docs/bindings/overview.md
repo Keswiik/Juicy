@@ -83,3 +83,26 @@ public sealed class ServiceConsumer {
     }
 }
 ```
+
+## Built-in Bindings
+Built-in bindings are created automatically. They are included even if an injector is created with **no** modules.
+
+Currently, this only includes the injector itself.
+
+```csharp
+public sealed class InjectorExample {
+    private IInjector injector
+
+    private InjectorExample(IInjector injector) {
+        this.injector = injector;
+    }
+}
+
+...
+
+var injectorExample = injector.Get<InjectorExample>();
+```
+`InjectorExample` now has access to the injector that was used to create it.
+
+**Using the injector in this way should be avoided.**
+
