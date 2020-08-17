@@ -22,6 +22,8 @@ namespace Juicy.Inject.Injection {
 
         internal ICache<Provider, Type, string> ProviderCache { get; }
 
+        internal Injector ParentInjector { get; }
+
         private Dictionary<BindingType, IBindingHandler> BindingHandlers { get; }
 
         private ICreator Creator { get; }
@@ -35,7 +37,15 @@ namespace Juicy.Inject.Injection {
         /// Creates the injector, initializes binding handlers, and gets all module bindings.
         /// </summary>
         /// <param name="modules">The modules to get bindings from.</param>
-        internal Injector(params AbstractModule[] modules) {
+        internal Injector(params AbstractModule[] modules) : this(null, modules) { }
+
+        /// <summary>
+        /// Creates an injector with a parent to delegate requests to if there is no binding.
+        /// </summary>
+        /// <param name="parentInjector">The parent to this injector.</param>
+        /// <param name="modules">The modules to get bindings from.</param>
+        internal Injector(Injector parentInjector, params AbstractModule[] modules) {
+            ParentInjector = parentInjector;
             BindingCache = new Cache<IBinding, Type, string>();
             InstanceCache = new Cache<object, Type, string>();
             ProviderCache = new Cache<Provider, Type, string>();
@@ -82,6 +92,10 @@ namespace Juicy.Inject.Injection {
 
         public T Get<T>(string name) {
             return (T)Get(typeof(T), name);
+        }
+
+        public IInjector CreateChildInjector(params AbstractModule[] modules) {
+            return new Injector(this, modules);
         }
 
         /// <summary>

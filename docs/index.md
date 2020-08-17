@@ -75,4 +75,35 @@ public static class Program {
 }
 ```
 
+## Creating Child Injectors
+
+Child injectors contain their own bindings, but will delegate to the injector that created them if a requested type has no bindings. This can be useful in situations where an implementation cannot be decided until after startup and requires additional dependencies to be installed.
+
+```csharp
+public sealed class Module : AbstractModule {
+    [Provides]
+    [Scope(BindingScope.Singleton)]
+    DbConnection ProvideDbConnection(string connectionType) {
+        IInjector injector;
+        switch (connectionType) {
+            case "sqlite":
+                injector = CreateChildInjector(new SqliteModule());
+                break;
+            case "postgres":
+                injector = CreateChildInjector(new PostgresModule());
+                break;
+            case "mysql":
+                injector = CreateChildInjector(new MysqlModule());
+                break;
+            default:
+                throw new InvalidOperationException("Could not determine DbConnection type.");
+        }
+
+        return injector.Get<DbConnection>();
+    }
+}
+```
+
 <sub><sub><sub>I know the examples are bad, but hopefully they get the idea across.</sub></sub></sub>
+
+<sup><sup><sup><sup>Especially that last example.</sup></sup></sup></sup>

@@ -13,13 +13,16 @@ namespace Reflector {
         private static void Main(string[] args) {
             IInjector injector = Juicer.CreateInjector(new TestModule());
             IInjector injector2 = injector.Get<IInjector>();
+            IInjector injector3 = injector.CreateChildInjector();
             Console.WriteLine($"Injector was able to inject itself: {injector == injector2}.");
 
             Console.WriteLine();
             IService service = injector.Get<IService>();
             ServiceImpl service2 = injector.Get<ServiceImpl>();
+            IService service3 = injector3.Get<IService>();
             service.DoThing();
             Console.WriteLine($"Same instance of service when using untargeted vs targeted binding: {service == service2}.");
+            Console.WriteLine($"Same instance of service retrieved from the child injector: {service == service3}");
 
             Console.WriteLine();
             Console.WriteLine($"Number from IService: {service.GetNumber()}");
