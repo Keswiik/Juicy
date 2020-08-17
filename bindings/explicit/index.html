@@ -285,6 +285,19 @@
     Type
   </a>
   
+    <nav class="md-nav" aria-label="Type">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#untargeted" class="md-nav__link">
+    Untargeted
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -372,6 +385,19 @@
     Type
   </a>
   
+    <nav class="md-nav" aria-label="Type">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#untargeted" class="md-nav__link">
+    Untargeted
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -403,7 +429,7 @@
 <p>Allows you to define what implementation of type you will use, but lets the injector create it for you.</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">Bind</span><span class="p">&lt;</span><span class="n">IService</span><span class="p">&gt;()</span>
     <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">ServiceImpl</span><span class="p">&gt;()</span>
-    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScopes</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
+    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
 
 <span class="p">...</span>
 
@@ -417,6 +443,12 @@
 <span class="p">}</span>
 </code></pre></div>
 Trying to use type bindings with value-types <strong>WILL</strong> result in errors.</p>
+<h3 id="untargeted">Untargeted<a class="headerlink" href="#untargeted" title="Permanent link">&para;</a></h3>
+<p>An untargeted binding specifies a concrete class when calling <code>Bind&lt;T&gt;()</code>. This can be used to make the injector aware of a type and modify the scope or name of the binding.</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">Bind</span><span class="p">&lt;</span><span class="n">ServiceImpl</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
+</code></pre></div>
+<strong>Note: These <em>can</em> be used in conjunction with normal bindings. They will, however, both share the same cache if set to be singletons. Instances are cached based on the implementation type.</strong></p>
 <h2 id="instance">Instance<a class="headerlink" href="#instance" title="Permanent link">&para;</a></h2>
 <p>Bind to a specific instance of a type. This is primarily used when binding to primitives.</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">Bind</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span>

@@ -410,7 +410,7 @@
     <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
         <span class="n">Bind</span><span class="p">&lt;</span><span class="n">IService</span><span class="p">&gt;()</span>
             <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">ServiceImpl</span><span class="p">&gt;()</span>
-            <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScopes</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
+            <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
         <span class="n">Bind</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span>
             <span class="p">.</span><span class="n">ToInstance</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>
             <span class="p">.</span><span class="n">Named</span><span class="p">(</span><span class="s">&quot;toDouble&quot;</span><span class="p">);</span>

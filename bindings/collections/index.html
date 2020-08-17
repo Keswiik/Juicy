@@ -293,6 +293,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#using-with-untargeted-bindings" class="md-nav__link">
+    Using with Untargeted Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#limitations" class="md-nav__link">
     Limitations
   </a>
@@ -361,6 +368,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#using-with-untargeted-bindings" class="md-nav__link">
+    Using with Untargeted Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#limitations" class="md-nav__link">
     Limitations
   </a>
@@ -389,7 +403,7 @@
     <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">InitializeCommand</span><span class="p">&gt;()</span>
     <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">PauseCommand</span><span class="p">&gt;()</span>
     <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">StartCommand</span><span class="p">&gt;()</span>
-    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScopes</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
+    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
 </code></pre></div>
 You must use the same type specified in the original <code>BindMany&lt;T&gt;()</code> call in order to have the values injected.</p>
 <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ServiceImpl</span> <span class="p">{</span>
@@ -402,6 +416,18 @@ You must use the same type specified in the original <code>BindMany&lt;T&gt;()</
 <span class="p">}</span>
 </code></pre></div>
 
+<h2 id="using-with-untargeted-bindings">Using with Untargeted Bindings<a class="headerlink" href="#using-with-untargeted-bindings" title="Permanent link">&para;</a></h2>
+<p><a href="../explicit/#untargeted">Untargeted Bindings</a> can be used in conjunction with collection bindings to determine how the individual implementing types are instantiated.</p>
+<p>In the above example, the <code>List&lt;ICommand&gt;</code> is bound as a singleton, so the <em>entire</em> list of values is cached after it is created. If you decided to inject a single command into another class, it would default to being instance-scoped.</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">BindMany</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">ICommand</span><span class="p">&gt;&gt;()</span>
+    <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">InitializeCommand</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">PauseCommand</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">StartCommand</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
+<span class="n">Bind</span><span class="p">&lt;</span><span class="n">PauseCommand</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
+</code></pre></div>
+The <code>PauseCommand</code> will now share its instance with the <code>List&lt;ICommand&gt;</code> binding, regardless of the order in which they are requested.</p>
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <p>The type provided when calling <code>BindMany&lt;T&gt;()</code> must inherit from <code>IEnumerable</code> <strong>AND</strong> have an <code>Add(value)</code> method.</p>
                 
