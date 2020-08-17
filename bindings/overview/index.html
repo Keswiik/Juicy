@@ -312,6 +312,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#built-in-bindings" class="md-nav__link">
+    Built-in Bindings
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -443,6 +450,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#built-in-bindings" class="md-nav__link">
+    Built-in Bindings
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -533,6 +547,24 @@ For bindings provided through methods, the <code>Scope</code> attribute can be u
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+
+<h2 id="built-in-bindings">Built-in Bindings<a class="headerlink" href="#built-in-bindings" title="Permanent link">&para;</a></h2>
+<p>Built-in bindings are created automatically. They are included even if an injector is created with <strong>no</strong> modules.</p>
+<p>Currently, this only includes the injector itself.</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">InjectorExample</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="n">IInjector</span> <span class="n">injector</span>
+
+    <span class="k">private</span> <span class="nf">InjectorExample</span><span class="p">(</span><span class="n">IInjector</span> <span class="n">injector</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">injector</span> <span class="p">=</span> <span class="n">injector</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">...</span>
+
+<span class="kt">var</span> <span class="n">injectorExample</span> <span class="p">=</span> <span class="n">injector</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">InjectorExample</span><span class="p">&gt;();</span>
+</code></pre></div>
+<code>InjectorExample</code> now has access to the injector that was used to create it.</p>
+<p><strong>Using the injector in this way should be avoided.</strong></p>
                 
               
               
