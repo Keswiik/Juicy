@@ -9,4 +9,3 @@ This project is not yet complete and is missing several features from Guice.
 - [Binding to maps](https://github.com/google/guice/wiki/Multibindings)
 - Overriding bindings of another module
 - Installing dependent modules
-- Injector hierarchy / child injectors
