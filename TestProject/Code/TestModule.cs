@@ -18,9 +18,8 @@ namespace TestProject.Code {
                 .To<MultiImplService2>();
             BindFactory<IOtherServiceFactory>() //
                 .Implement<IOtherService, OtherServiceImpl>();
-            Bind<int>() //
-                .Named("Num1") //
-                .ToInstance(25);
+
+            Install(new NestedTestModule());
         }
 
         [Provides]

@@ -93,6 +93,7 @@ Currently, this only includes the injector itself.
 public sealed class InjectorExample {
     private IInjector injector
 
+    [Inject]
     private InjectorExample(IInjector injector) {
         this.injector = injector;
     }
@@ -105,4 +106,15 @@ var injectorExample = injector.Get<InjectorExample>();
 `InjectorExample` now has access to the injector that was used to create it.
 
 **Using the injector in this way should be avoided.**
+
+## Binding Dependencies
+Modules are able to install other modules. This can be used to decide binding implementations at runtime, or install external dependencies for your bindings.
+
+```csharp
+public sealed class ModuleWithDependencies {
+    public void Configure() {
+        Install(new DependencyModule());
+    }
+}
+```
 
