@@ -111,10 +111,50 @@ var injectorExample = injector.Get<InjectorExample>();
 Modules are able to install other modules. This can be used to decide binding implementations at runtime, or install external dependencies for your bindings.
 
 ```csharp
-public sealed class ModuleWithDependencies {
+public sealed class ModuleWithDependencies : AbstractModule {
     public void Configure() {
         Install(new DependencyModule());
     }
 }
 ```
 
+## Overriding Bindings
+Modules can override bindings from other modules, but **only** when the injector is being created or the modules are installed.
+
+```csharp
+public sealed class OverriddenModule : AbstractModule {
+    public void Configure() {
+        Bind<int>()
+            .Named("Overridden")
+            .ToInstance(5);
+        Bind<int>()
+            .Named("NotOverridden")
+            .ToInstance(4);
+    }
+}
+
+public sealed class BaseModule : AbstractModule {
+    public void Configure() {
+        Bind<int>()
+            .Named("Overridden")
+            .ToInstance(10);
+    }
+}
+
+// installing the overridden module within another module
+
+public sealed class Module : AbstractModule {
+    public void Configure() {
+        Install(new BaseModule().Override(new OverriddenModule()));
+    }
+}
+
+// both base modules being used directly in an injector
+
+Injector injector = Juicy.CreateInjector(new BaseModule().Override(new OverriddenModule()));
+
+int overridden = injector.Get<int>("Overridden"); // 10
+int notOverridden = injector.Get<int>("NotOverridden"); // 4
+```
+
+In the above example, the `"Overridden"` binding from the first module is replaced with the corresponding binding from `BaseModule`. Currently, this override logic also applies to **ALL** bindings installed in the module being overridden as well.

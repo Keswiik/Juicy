@@ -50,12 +50,16 @@ namespace Juicy.Inject.Injection {
             InstalledModules.Add(module as AbstractModule);
         }
 
+        public AbstractModule Override(AbstractModule module) {
+            return new OverrideModule(this, module);
+        }
+
         /// <summary>
         /// All explicit bindings using <see cref="Bind{T}"/>, <see cref="BindFactory{T}"/>, or <see cref="BindMany{T}"/> should be added in the override of this method.
         /// </summary>
         public abstract void Configure();
 
-        internal List<IBinding> GetBindings() {
+        virtual internal List<IBinding> GetBindings() {
             List<IBinding> bindings = new List<IBinding>();
             foreach (IBuilder builder in BindingBuilders) {
                 bindings.Add(builder.Build());
