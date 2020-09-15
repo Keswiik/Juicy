@@ -11,7 +11,7 @@ namespace Reflector {
     internal class Program {
 
         private static void Main(string[] args) {
-            IInjector injector = Juicer.CreateInjector(new TestModule());
+            IInjector injector = Juicer.CreateInjector(new TestModule().Override(new ModuleToOverride()));
             IInjector injector2 = injector.Get<IInjector>();
             IInjector injector3 = injector.CreateChildInjector();
             Console.WriteLine($"Injector was able to inject itself: {injector == injector2}.");

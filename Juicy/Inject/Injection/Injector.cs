@@ -53,7 +53,7 @@ namespace Juicy.Inject.Injection {
             var reflector = new Reflector();
             Creator = new Creator(this, reflector);
             MethodInvoker = new MethodInvoker(this, reflector);
-            MethodBindingFactory = new MethodBindingFactory(this, reflector);
+            MethodBindingFactory = new MethodBindingFactory(reflector);
 
             BindingHandlers = new Dictionary<BindingType, IBindingHandler> {
                 { BindingType.Collection, new CollectionBindingHandler(this) },
@@ -70,8 +70,12 @@ namespace Juicy.Inject.Injection {
                 module.Configure();
 
                 var bindings = new List<IBinding>();
-                bindings.AddRange(MethodBindingFactory.CreateBindings(module));
-                bindings.AddRange(module.GetBindings());
+                if (module is OverrideModule) {
+                    bindings.AddRange(module.GetBindings());
+                } else {
+                    bindings.AddRange(MethodBindingFactory.CreateBindings(module));
+                    bindings.AddRange(module.GetBindings());
+                }
 
                 foreach (IBinding binding in bindings) {
                     CacheBinding(binding);

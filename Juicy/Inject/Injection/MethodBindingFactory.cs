@@ -17,12 +17,9 @@ namespace Juicy.Inject.Injection {
 
         private static readonly Type ProvidesAttributeType = typeof(ProvidesAttribute);
 
-        private Injector Injector { get; }
-
         private Reflector Reflector { get; }
 
-        internal MethodBindingFactory(Injector injector, Reflector reflector) {
-            Injector = injector;
+        internal MethodBindingFactory(Reflector reflector) {
             Reflector = reflector;
         }
 
@@ -40,10 +37,6 @@ namespace Juicy.Inject.Injection {
 
                 if (name != null && string.IsNullOrWhiteSpace(name)) {
                     throw new InvalidOperationException($"Invalid empty or whitespace name on provider method named {method.Name} in {module.GetType().FullName}.");
-                } else if (name != null && Injector.BindingCache.IsCached(baseType, name)) {
-                    throw new InvalidOperationException($"Named binding from provider method named {method.Name} in {module.GetType().FullName} conflicts with an existing binding of name {name}.");
-                } else if (name == null && Injector.BindingCache.IsCached(baseType)) {
-                    throw new InvalidOperationException($"Binding from provided method named {method.Name} in {module.GetType().FullName} conflicts with an existing binding.");
                 }
 
                 IBuilder builder = new MethodBinding.MethodBindingBuilder(baseType, BindingType.Method, module) //
