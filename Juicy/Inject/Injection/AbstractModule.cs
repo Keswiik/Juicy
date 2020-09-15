@@ -5,6 +5,7 @@ using Juicy.Interfaces.Injection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 
 namespace Juicy.Inject.Injection {
@@ -16,8 +17,11 @@ namespace Juicy.Inject.Injection {
 
         internal List<IBuilder> BindingBuilders { get; }
 
+        internal List<AbstractModule> InstalledModules { get; }
+
         protected AbstractModule() {
             BindingBuilders = new List<IBuilder>();
+            InstalledModules = new List<AbstractModule>();
         }
 
         public ConcreteBinding.ConcreteBindingBuilder Bind<T>() {
@@ -36,6 +40,14 @@ namespace Juicy.Inject.Injection {
             var builder =  new CollectionBinding.CollectionBindingBuilder(typeof(T), BindingType.Collection, this);
             BindingBuilders.Add(builder);
             return builder;
+        }
+
+        public void Install(IModule module) {
+            if (!(module is AbstractModule)) {
+                throw new InvalidOperationException("Installed module is not an AbstractModule.");
+            }
+
+            InstalledModules.Add(module as AbstractModule);
         }
 
         /// <summary>

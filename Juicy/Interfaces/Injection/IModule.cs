@@ -31,5 +31,14 @@ namespace Juicy.Interfaces.Injection {
         /// <typeparam name="T">The interface that the factory will be bound to.</typeparam>
         /// <returns>A binding builder for factory bindings.</returns>
         FactoryBinding.FactoryBindingBuilder BindFactory<T>();
+
+        /// <summary>
+        /// Installs bindings from an external module.
+        /// </summary>
+        /// <remarks>
+        /// This can be used to install modules containing dependencies of the current module. This is to create self-contained modules.
+        /// </remarks>
+        /// <param name="module">The module to install bindings from.</param>
+        void Install(IModule module);
     }
 }
