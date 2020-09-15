@@ -344,6 +344,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#overriding-bindings" class="md-nav__link">
+    Overriding Bindings
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -487,6 +494,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#overriding-bindings" class="md-nav__link">
+    Overriding Bindings
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -602,12 +616,51 @@ For bindings provided through methods, the <code>Scope</code> attribute can be u
 <p><strong>Using the injector in this way should be avoided.</strong></p>
 <h2 id="binding-dependencies">Binding Dependencies<a class="headerlink" href="#binding-dependencies" title="Permanent link">&para;</a></h2>
 <p>Modules are able to install other modules. This can be used to decide binding implementations at runtime, or install external dependencies for your bindings.</p>
-<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ModuleWithDependencies</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ModuleWithDependencies</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
     <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
         <span class="n">Install</span><span class="p">(</span><span class="k">new</span> <span class="n">DependencyModule</span><span class="p">());</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+
+<h2 id="overriding-bindings">Overriding Bindings<a class="headerlink" href="#overriding-bindings" title="Permanent link">&para;</a></h2>
+<p>Modules can override bindings from other modules, but <strong>only</strong> when the injector is being created or the modules are installed.</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">OverriddenModule</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Bind</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">Named</span><span class="p">(</span><span class="s">&quot;Overridden&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">ToInstance</span><span class="p">(</span><span class="m">5</span><span class="p">);</span>
+        <span class="n">Bind</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">Named</span><span class="p">(</span><span class="s">&quot;NotOverridden&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">ToInstance</span><span class="p">(</span><span class="m">4</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">BaseModule</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Bind</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">Named</span><span class="p">(</span><span class="s">&quot;Overridden&quot;</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">ToInstance</span><span class="p">(</span><span class="m">10</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// installing the overridden module within another module</span>
+
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Module</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Install</span><span class="p">(</span><span class="k">new</span> <span class="n">BaseModule</span><span class="p">().</span><span class="n">Override</span><span class="p">(</span><span class="k">new</span> <span class="n">OverriddenModule</span><span class="p">()));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// both base modules being used directly in an injector</span>
+
+<span class="n">Injector</span> <span class="n">injector</span> <span class="p">=</span> <span class="n">Juicy</span><span class="p">.</span><span class="n">CreateInjector</span><span class="p">(</span><span class="k">new</span> <span class="n">BaseModule</span><span class="p">().</span><span class="n">Override</span><span class="p">(</span><span class="k">new</span> <span class="n">OverriddenModule</span><span class="p">()));</span>
+
+<span class="kt">int</span> <span class="n">overridden</span> <span class="p">=</span> <span class="n">injector</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="s">&quot;Overridden&quot;</span><span class="p">);</span> <span class="c1">// 10</span>
+<span class="kt">int</span> <span class="n">notOverridden</span> <span class="p">=</span> <span class="n">injector</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="s">&quot;NotOverridden&quot;</span><span class="p">);</span> <span class="c1">// 4</span>
+</code></pre></div>
+
+<p>In the above example, the <code>"Overridden"</code> binding from the first module is replaced with the corresponding binding from <code>BaseModule</code>. Currently, this override logic also applies to <strong>ALL</strong> bindings installed in the module being overridden as well.</p>
                 
               
               
