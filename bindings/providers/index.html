@@ -16,7 +16,7 @@
     
     
       
-        <title>Methods - Juicy Documentation</title>
+        <title>Providers - Juicy Documentation</title>
       
     
     
@@ -59,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#method-bindings" class="md-skip">
+        <a href="#providers" class="md-skip">
           Skip to content
         </a>
       
@@ -87,7 +87,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Methods
+              Providers
             
           </span>
         </div>
@@ -303,6 +303,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../methods/" title="Methods" class="md-nav__link">
+      Methods
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -313,22 +325,10 @@
       
     
     
-    <a href="./" title="Methods" class="md-nav__link md-nav__link--active">
-      Methods
-    </a>
-    
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../providers/" title="Providers" class="md-nav__link">
+    <a href="./" title="Providers" class="md-nav__link md-nav__link--active">
       Providers
     </a>
+    
   </li>
 
         
@@ -364,7 +364,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/Keswiik/Juicy/edit/master/docs/bindings/methods.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/Keswiik/Juicy/edit/master/docs/bindings/providers.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
@@ -372,34 +372,32 @@
                   
                 
                 
-                <h1 id="method-bindings">Method Bindings<a class="headerlink" href="#method-bindings" title="Permanent link">&para;</a></h1>
-<p>Useful when you need to inject a class that isn't correctly attributed for injections. This usually includes 3<sup>rd</sup> party dependencies.</p>
-<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Module</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
-<span class="na">    [Provides]</span>
-<span class="na">    [Singleton]</span>
-    <span class="k">public</span> <span class="n">DbConnection</span> <span class="nf">ProvideDatabaseConnection</span><span class="p">(</span>
-<span class="na">            [Named(&quot;connectionString&quot;)]</span> <span class="kt">string</span> <span class="n">connectionString</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">SqliteConnection</span><span class="p">(</span><span class="n">connectionString</span><span class="p">);</span>
+                <h1 id="providers">Providers<a class="headerlink" href="#providers" title="Permanent link">&para;</a></h1>
+<p>If method bindings within a module become lengthy, they can be moved to an implementation of the <code>Provider&lt;T&gt;</code> interface.</p>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ProviderModule</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Bind</span><span class="p">&lt;</span><span class="n">IService</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">ToProvider</span><span class="p">&lt;</span><span class="n">ServiceProvider</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScopes</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="p">...</span>
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ServiceProvider</span> <span class="p">:</span> <span class="n">IProvider</span><span class="p">&lt;</span><span class="n">IService</span><span class="p">&gt;</span> <span class="p">{</span>
 
-<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">PersonServiceImpl</span> <span class="p">{</span>
-    <span class="k">private</span> <span class="n">DbConnection</span> <span class="n">connection</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">;</span>
 
 <span class="na">    [Inject]</span>
-    <span class="k">private</span> <span class="nf">PersonServiceImpl</span><span class="p">(</span><span class="n">DbConnection</span> <span class="n">connection</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">connection</span> <span class="p">=</span> <span class="n">connection</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nf">ServiceProvider</span><span class="p">(</span><span class="n">IConfiguration</span> <span class="n">configuration</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">timeout</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">.</span><span class="n">GetTimeout</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="k">public</span> <span class="n">IPerson</span> <span class="nf">GetByFirstName</span><span class="p">(</span><span class="kt">string</span> <span class="n">firstname</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// use connection</span>
+    <span class="k">public</span> <span class="n">IService</span> <span class="nf">Get</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">ServiceImpl</span><span class="p">(</span><span class="n">timeout</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<p>Bindings of this type are <strong>only</strong> detected when they are within a subclass of <code>AbstractModule</code>.</p>
+<p>While the above is a poor example, it illustrates how to set up bindings using an external provider.</p>
                 
               
               
@@ -418,7 +416,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../factories/" title="Factories" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../methods/" title="Methods" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -427,25 +425,11 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Factories
+                Methods
               </div>
             </div>
           </a>
         
-        
-          <a href="../providers/" title="Providers" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Providers
-              </div>
-            </div>
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-            </div>
-          </a>
         
       </nav>
     </div>
