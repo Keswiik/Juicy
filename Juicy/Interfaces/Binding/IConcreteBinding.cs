@@ -21,5 +21,7 @@ namespace Juicy.Interfaces.Binding {
         /// Mainly used to form named bindings of primitive types.
         /// </remarks>
         public object Instance { get; }
+
+        public Type Provider { get; }
     }
 }

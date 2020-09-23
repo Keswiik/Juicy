@@ -46,3 +46,4 @@ nav:
     - Collections: bindings/collections.md
     - Factories: bindings/factories.md
     - Methods: bindings/methods.md
+    - Providers: bindings/providers.md

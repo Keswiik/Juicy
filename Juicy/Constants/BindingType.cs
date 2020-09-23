@@ -13,6 +13,7 @@ namespace Juicy.Constants {
         Concrete,
         Factory,
         Method,
-        None
+        None,
+        Provider
     }
 }

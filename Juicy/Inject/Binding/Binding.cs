@@ -67,7 +67,7 @@ namespace Juicy.Inject.Binding {
 
             protected BindingScope BindingScope { get; set; }
 
-            protected BindingType BindingType { get; }
+            protected BindingType BindingType { get; set; }
 
             protected string Name { get; set; }
 

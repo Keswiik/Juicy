@@ -4,6 +4,7 @@ using Juicy.Constants;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Juicy.Inject.Injection.Provide;
 
 namespace Juicy.Inject.Binding {
 
@@ -14,6 +15,8 @@ namespace Juicy.Inject.Binding {
 
         public object Instance { get; }
 
+        public Type Provider { get; }
+
         /// <summary>
         /// Consumes builder to fill out attributes.
         /// </summary>
@@ -21,6 +24,7 @@ namespace Juicy.Inject.Binding {
         private ConcreteBinding(IConcreteBindingComponent component) : base(component) {
             ImplementationType = component.ImplementationType;
             Instance = component.Instance;
+            Provider = component.Provider;
 
             // check for untargeted bindings and update accordingly
             if (Instance == null && ImplementationType == null) {
@@ -33,6 +37,8 @@ namespace Juicy.Inject.Binding {
             internal Type ImplementationType { get; }
 
             internal object Instance { get; }
+
+            internal Type Provider { get; }
         }
 
         /// <inheritdoc/>
@@ -41,9 +47,13 @@ namespace Juicy.Inject.Binding {
 
             object IConcreteBindingComponent.Instance => Instance;
 
+            Type IConcreteBindingComponent.Provider => Provider;
+
             private Type ImplementationType { get; set; }
 
             private object Instance { get; set; }
+
+            private Type Provider { get; set; }
 
             internal ConcreteBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
@@ -67,8 +77,25 @@ namespace Juicy.Inject.Binding {
             /// <returns>The builder.</returns>
             public T ToInstance(object instance) {
                 Instance = instance;
+                Provider = null;
                 ImplementationType = instance.GetType();
                 BindingScope = BindingScope.Singleton;
+                return this as T;
+            }
+
+            /// <summary>
+            /// Binds <seealso cref="IBinding.BaseType"/> to a class that implements <c>IProvider</c>.
+            /// </summary>
+            /// <remarks>
+            /// All provider bindings must use the <seealso cref="BindingType.Provider"/> binding type.
+            /// </remarks>
+            /// <param name="type">The type of the provider.</param>
+            /// <returns>The builder.</returns>
+            public T ToProvider<J>() {
+                Provider = typeof(J);
+                Instance = null;
+                BindingType = BindingType.Provider;
+                ImplementationType = BaseType;
                 return this as T;
             }
         }

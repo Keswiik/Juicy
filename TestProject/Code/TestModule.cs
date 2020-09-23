@@ -13,6 +13,9 @@ namespace TestProject.Code {
                 .In(BindingScope.Singleton);
             Bind<ServiceImpl>() //
                 .In(BindingScope.Singleton);
+            Bind<IExternallyProvidedService>() //
+                .ToProvider<ExternalProvider>()
+                .In(BindingScope.Singleton);
             BindMany<HashSet<IMultiImplService>>() //
                 .To<MultiImplService1>() //
                 .To<MultiImplService2>();

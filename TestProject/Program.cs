@@ -8,9 +8,9 @@ using TestProject.Code;
 
 namespace Reflector {
 
-    internal class Program {
+    internal static class Program {
 
-        private static void Main(string[] args) {
+        private static void Main() {
             IInjector injector = Juicer.CreateInjector(new TestModule().Override(new ModuleToOverride()));
             IInjector injector2 = injector.Get<IInjector>();
             IInjector injector3 = injector.CreateChildInjector();
@@ -42,6 +42,11 @@ namespace Reflector {
 
             Console.WriteLine();
             Console.WriteLine($"Doubled Num1: {injector.Get<int>("DoubledNum1")}");
+
+            Console.WriteLine();
+            var externallyProvidedService = injector.Get<IExternallyProvidedService>();
+            Console.WriteLine($"String from externally provided service: {externallyProvidedService.GetPrintString()}");
+            Console.WriteLine($"Same instance of externally provided service received: {externallyProvidedService == injector.Get<IExternallyProvidedService>()}.");
 #if DEBUG
             Console.ReadLine();
 #endif
