@@ -60,7 +60,8 @@ namespace Juicy.Inject.Injection {
                 { BindingType.Concrete, new ConcreteBindingHandler(this, Creator) },
                 { BindingType.Factory, new FactoryBindingHandler(this, Creator) },
                 { BindingType.Method, new MethodBindingHandler(this, MethodInvoker) },
-                { BindingType.None, new NoBindingHandler(this, Creator) }
+                { BindingType.None, new NoBindingHandler(this, Creator) },
+                { BindingType.Provider, new ProviderBindingHandler(this) }
             };
 
             Queue<AbstractModule> moduleInstallationQueue = new Queue<AbstractModule>(modules);
