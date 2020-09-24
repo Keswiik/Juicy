@@ -7,6 +7,8 @@ using System.Text;
 using static Juicy.Inject.Binding.DictionaryBinding;
 
 namespace Juicy.Inject.Binding {
+
+    /// <inheritdoc cref="IDictionaryBinding"/>
     public sealed class DictionaryBinding : Binding, IDictionaryBinding {
 
         public Dictionary<object, Type> ImplementationTypes { get; }

@@ -44,7 +44,7 @@ namespace Juicy.Inject.Injection.Handler {
             if (!hitCache || !isCached) {
                 IDictionary dictionary = (IDictionary)Activator.CreateInstance(mapBinding.BaseType);
                 foreach (var key in mapBinding.ImplementationTypes.Keys) {
-                    dynamic instance = Injector.Get(mapBinding.ImplementationTypes[key], null);
+                    object instance = Injector.Get(mapBinding.ImplementationTypes[key], null);
                     dictionary.Add(key, instance);
                 }
 
