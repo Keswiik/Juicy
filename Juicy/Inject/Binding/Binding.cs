@@ -1,4 +1,5 @@
 ﻿using Juicy.Constants;
+using Juicy.Inject.Binding.Attributes;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
@@ -94,6 +95,19 @@ namespace Juicy.Inject.Binding {
             /// <returns>The builder.</returns>
             public T Named(string name) {
                 Name = name;
+                return this as T;
+            }
+
+            /// <summary>
+            /// Sets the name of a binding by using an attribute.
+            /// </summary>
+            /// <remarks>
+            /// Name makes use of the attribute's full name, so attributes with the same name in different namespaces will not clash.
+            /// </remarks>
+            /// <typeparam name="A">The type of attribute, derived from <see cref="BindingAddtirubte"/>, to use as the name.</typeparam>
+            /// <returns>The builder.</returns>
+            public T Attributed<A>() where A : BindingAttribute {
+                Name = typeof(A).FullName;
                 return this as T;
             }
         }

@@ -1,8 +1,9 @@
 ﻿using Juicy.Inject.Binding.Attributes;
 using Juicy.Reflection.Interfaces;
 using System;
+using System.Collections.Generic;
 
- namespace Juicy.Reflection.Models {
+namespace Juicy.Reflection.Models {
 
     ///<inheritdoc cref="ICachedParameter"/>
     internal sealed class CachedParameter : AttributeHolder, ICachedParameter {
@@ -17,6 +18,12 @@ using System;
 
             // find attribute information
             Name = GetAttribute<NamedAttribute>()?.Name;
+            if (Name == null) {
+                List<Attribute> bindingAttributes = GetAttributeWithParent<BindingAttribute>();
+                if (bindingAttributes.Count == 1) {
+                    Name = bindingAttributes[0].GetType().FullName;
+                }
+            }
         }
 
         public Type Type { get; }

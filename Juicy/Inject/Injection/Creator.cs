@@ -50,12 +50,8 @@ namespace Juicy.Inject.Injection {
                         throw new InvalidOperationException($"Failed to locate the parameter at position {i} in type {type}.");
                     }
 
-                    // TODO: simplify
-                    if (parameter.HasAttribute(typeof(NamedAttribute))) {
-                        var attribute = parameter.GetAttribute<NamedAttribute>();
-                        if (!string.IsNullOrWhiteSpace(attribute?.Name)) {
-                            parameters[i] = Injector.Get(parameter.Type, attribute.Name);
-                        }
+                    if (!string.IsNullOrWhiteSpace(parameter.Name)) {
+                        parameters[i] = Injector.Get(parameter.Type, parameter.Name);
                     } else {
                         parameters[i] = Injector.Get(parameter.Type, null);
                     }
