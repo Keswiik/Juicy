@@ -315,6 +315,26 @@
     Binding Names
   </a>
   
+    <nav class="md-nav" aria-label="Binding Names">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#namedattribute" class="md-nav__link">
+    NamedAttribute
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bindingattribute" class="md-nav__link">
+    BindingAttribute
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -489,6 +509,26 @@
     Binding Names
   </a>
   
+    <nav class="md-nav" aria-label="Binding Names">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#namedattribute" class="md-nav__link">
+    NamedAttribute
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bindingattribute" class="md-nav__link">
+    BindingAttribute
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -559,7 +599,65 @@ For bindings provided through methods, the <code>Scope</code> attribute can be u
 <p>Singleton bindings will be cached once they are requested for the first time. The cached value will be returned for any subsequent requests.</p>
 <p>Certain bindings (<a href="../explicit/#instance">instance</a>) will default to this scope. While you can alter scope of these bindings explicitly, doing so is discouraged.</p>
 <h2 id="binding-names">Binding Names<a class="headerlink" href="#binding-names" title="Permanent link">&para;</a></h2>
-<p>Bindings can either be <strong>named</strong> or <strong>unnamed</strong>. Named bindings allow you to differentiate between bindings of the same type.</p>
+<p>Bindings can either be <strong>named</strong> or <strong>unnamed</strong>. Named bindings allow you to differentiate between bindings of the same type. Bindings can be named either using a <code>NamedAttribute</code> or <code>BindingAttribute</code>.</p>
+<h3 id="namedattribute">NamedAttribute<a class="headerlink" href="#namedattribute" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">NamedModule</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// as a concrete binding</span>
+        <span class="n">Bind</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">ToInstance</span><span class="p">(</span><span class="m">20</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">Named</span><span class="p">(</span><span class="s">&quot;NumberWithStringName&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// as a provider / method binding</span>
+<span class="na">    [Provides]</span>
+<span class="na">    [Named(&quot;NumberWithStringName&quot;)]</span>
+<span class="na">    [Scope(BindingScope.Singleton)]</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">ProvidesNamedNumber</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="m">20</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ServiceImpl</span> <span class="p">:</span> <span class="n">IService</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">number</span><span class="p">;</span>
+
+<span class="na">    [Inject]</span>
+    <span class="k">public</span> <span class="nf">ServiceImpl</span><span class="p">([</span><span class="n">Named</span><span class="p">(</span><span class="s">&quot;NumberWithStringName&quot;</span><span class="p">)]</span> <span class="kt">int</span> <span class="n">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">number</span> <span class="p">=</span> <span class="n">number</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="bindingattribute">BindingAttribute<a class="headerlink" href="#bindingattribute" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">NamedNumberAttribute</span> <span class="p">:</span> <span class="n">BindingAttribute</span> <span class="p">{}</span>
+
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">NamedModule</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configure</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// as a concrete binding</span>
+        <span class="n">Bind</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span>
+            <span class="p">.</span><span class="n">ToInstance</span><span class="p">(</span><span class="m">20</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">Attributed</span><span class="p">&lt;</span><span class="n">NamedNumberAttribute</span><span class="p">&gt;();</span>
+    <span class="p">}</span>
+
+    <span class="c1">// as a provider / method binding</span>
+<span class="na">    [Provides]</span>
+<span class="na">    [NamedNumber]</span>
+<span class="na">    [Scope(BindingScope.Singleton)]</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">ProvidesNamedNumber</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="m">20</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ServiceImpl</span> <span class="p">:</span> <span class="n">IService</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">number</span><span class="p">;</span>
+
+<span class="na">    [Inject]</span>
+    <span class="k">public</span> <span class="nf">ServiceImpl</span><span class="p">([</span><span class="n">NamedNumber</span><span class="p">]</span> <span class="kt">int</span> <span class="n">number</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">number</span> <span class="p">=</span> <span class="n">number</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
 <h2 id="binding-conflicts">Binding Conflicts<a class="headerlink" href="#binding-conflicts" title="Permanent link">&para;</a></h2>
 <p>To avoid binding conflicts, you should follow two rules</p>
 <ul>
