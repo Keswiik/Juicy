@@ -35,9 +35,15 @@ using System.Reflection;
             methodBase = component._MethodBase;
 
             // find attribute information
-            BindingName = GetAttribute<NamedAttribute>()?.Name;
             Provides = HasAttribute(typeof(ProvidesAttribute));
             Scope = GetAttribute<ScopeAttribute>()?.Scope ?? BindingScope.Instance;
+            BindingName = GetAttribute<NamedAttribute>()?.Name;
+            if (BindingName == null) {
+                List<Attribute> bindingAttributes = GetAttributeWithParent<BindingAttribute>();
+                if (bindingAttributes.Count == 1) {
+                    BindingName = bindingAttributes[0].GetType().FullName;
+                }
+            }
         }
 
         public T Invoke<T>(object instance, params object[] args) {

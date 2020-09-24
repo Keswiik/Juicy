@@ -4,6 +4,7 @@ using Juicy.Inject.Injection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TestProject.Code.Attributes;
 using TestProject.Code.MappedService;
 
 namespace TestProject.Code {
@@ -26,6 +27,9 @@ namespace TestProject.Code {
                 .To(MappedServiceTypes.One, typeof(MappedService1))
                 .To(MappedServiceTypes.Two, typeof(MappedService2))
                 .In(BindingScope.Singleton);
+            Bind<string>()
+                .ToInstance("This is a string to print")
+                .Attributed<PrintStringAttribute>();
 
             Install(new NestedTestModule());
         }

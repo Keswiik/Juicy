@@ -29,7 +29,7 @@ namespace Juicy.Inject.Binding {
         }
 
         /// <inheritdoc/>
-        public abstract class MethodBindingComponent<T> : Binding.BindingComponent<T>, IMethodBindingComponent where T : MethodBindingComponent<T> {
+        public abstract class MethodBindingComponent<T> : BindingComponent<T>, IMethodBindingComponent where T : MethodBindingComponent<T> {
             ICachedMethod IMethodBindingComponent._Method => _Method;
 
             private ICachedMethod _Method { get; set; }

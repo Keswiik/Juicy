@@ -73,6 +73,19 @@ using System.Collections.Generic;
             return new List<Attribute>(attributes[type]);
         }
 
+        protected List<Attribute> GetAttributeWithParent<T>() {
+            List<Attribute> selectedAttributes = new List<Attribute>();
+            foreach (var attributeList in attributes.Values) {
+                foreach (var attribute in attributeList) {
+                    if (attribute is T) {
+                        selectedAttributes.Add(attribute);
+                    }
+                }
+            }
+
+            return selectedAttributes;
+        }
+
         #region Builder
 
         /// <summary>

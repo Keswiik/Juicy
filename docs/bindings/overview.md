@@ -16,7 +16,67 @@ Singleton bindings will be cached once they are requested for the first time. Th
 Certain bindings ([instance](./explicit.md#instance)) will default to this scope. While you can alter scope of these bindings explicitly, doing so is discouraged.
 
 ## Binding Names
-Bindings can either be **named** or **unnamed**. Named bindings allow you to differentiate between bindings of the same type.
+Bindings can either be **named** or **unnamed**. Named bindings allow you to differentiate between bindings of the same type. Bindings can be named either using a `NamedAttribute` or `BindingAttribute`.
+
+### NamedAttribute
+```csharp
+public sealed class NamedModule : AbstractModule {
+    public void Configure() {
+        // as a concrete binding
+        Bind<int>()
+            .ToInstance(20)
+            .Named("NumberWithStringName");
+    }
+
+    // as a provider / method binding
+    [Provides]
+    [Named("NumberWithStringName")]
+    [Scope(BindingScope.Singleton)]
+    public int ProvidesNamedNumber() {
+        return 20;
+    }
+}
+
+public sealed class ServiceImpl : IService {
+    private readonly int number;
+
+    [Inject]
+    public ServiceImpl([Named("NumberWithStringName")] int number) {
+        this.number = number;
+    }
+}
+```
+
+### BindingAttribute
+```csharp
+public sealed class NamedNumberAttribute : BindingAttribute {}
+
+public sealed class NamedModule : AbstractModule {
+    public void Configure() {
+        // as a concrete binding
+        Bind<int>()
+            .ToInstance(20)
+            .Attributed<NamedNumberAttribute>();
+    }
+
+    // as a provider / method binding
+    [Provides]
+    [NamedNumber]
+    [Scope(BindingScope.Singleton)]
+    public int ProvidesNamedNumber() {
+        return 20;
+    }
+}
+
+public sealed class ServiceImpl : IService {
+    private readonly int number;
+
+    [Inject]
+    public ServiceImpl([NamedNumber] int number) {
+        this.number = number;
+    }
+}
+```
 
 ## Binding Conflicts
 To avoid binding conflicts, you should follow two rules

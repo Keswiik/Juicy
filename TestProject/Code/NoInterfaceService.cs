@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TestProject.Code.Attributes;
 
 namespace TestProject.Code {
     public class NoInterfaceService {
         private string toPrint;
 
         [Inject]
-        public NoInterfaceService([Named("PrintString")] string toPrint) {
+        public NoInterfaceService([PrintString] string toPrint) {
             this.toPrint = toPrint;
         }
 
