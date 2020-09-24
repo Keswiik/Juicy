@@ -11,6 +11,7 @@ namespace Juicy.Constants {
     public enum BindingType {
         Collection,
         Concrete,
+        Dictionary,
         Factory,
         Method,
         None,

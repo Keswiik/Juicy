@@ -1,6 +1,9 @@
 # Collection Bindings
 
-Collection bindings make use of the `BindMany<T>()` method within a module. They allow you to bind multiple implementations of a service together.
+Collection bindings make use of the `BindMany<T>()` or `BindDictionary<T>()` methods within a module. They involve creating one-to-many bindings.
+
+## List / Set Bindings
+List and set bindings make use of the `BindMany<T>()` method within a module. They allow you to bundle implementations of a service together.
 
 ```csharp
 BindMany<List<ICommand>>()
@@ -9,14 +12,35 @@ BindMany<List<ICommand>>()
     .To<StartCommand>()
     .In(BindingScope.Singleton);
 ```
-You must use the same type specified in the original `BindMany<T>()` call in order to have the values injected.
-
 ```csharp
 public sealed class ServiceImpl {
     private List<ICommand> commands;
 
-    private ServiceImpl(List<ICommand> commands) {
+    [Inject]
+    public ServiceImpl(List<ICommand> commands) {
         this.commands = commands;
+    }
+    ...
+}
+```
+
+## Dictionary Bindings
+
+Dictionary bindings make use of the `BindDictionary<T>()` method within a module. They allow you to map implementations of a service to keys.
+
+```csharp
+BindDictionary<Dictionary<string, ICommand>>()
+    .To("StartCommand", typeof(StartCommand))
+    .To("StopCommand", typeof(StopCommand))
+    .In(BindingScope.Singleton);
+```
+```csharp
+public sealed class ServiceImpl {
+    private Dictionary<string, ICommand> commands;
+
+    [Inject]
+    public ServiceImpl(Dictionary<string, ICommand> commands) {
+        this.commands = commands.
     }
     ...
 }
@@ -40,3 +64,5 @@ The `PauseCommand` will now share its instance with the `List<ICommand>` binding
 
 ## Limitations
 The type provided when calling `BindMany<T>()` must inherit from `IEnumerable` **AND** have an `Add(value)` method.
+
+You **must** use the same type specified in the original `Bind...<T>()` call in order to have values injected.

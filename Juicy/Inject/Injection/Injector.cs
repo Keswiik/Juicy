@@ -59,6 +59,7 @@ namespace Juicy.Inject.Injection {
                 { BindingType.Collection, new CollectionBindingHandler(this) },
                 { BindingType.Concrete, new ConcreteBindingHandler(this, Creator) },
                 { BindingType.Factory, new FactoryBindingHandler(this, Creator) },
+                { BindingType.Dictionary, new DictionaryBindingHandler(this, Creator) },
                 { BindingType.Method, new MethodBindingHandler(this, MethodInvoker) },
                 { BindingType.None, new NoBindingHandler(this, Creator) },
                 { BindingType.Provider, new ProviderBindingHandler(this) }

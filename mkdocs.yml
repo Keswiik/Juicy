@@ -44,6 +44,7 @@ nav:
     - Overview: bindings/overview.md
     - Explicit: bindings/explicit.md
     - Collections: bindings/collections.md
+    - Dictionaries: bindings/dictionaries.md
     - Factories: bindings/factories.md
     - Methods: bindings/methods.md
     - Providers: bindings/providers.md

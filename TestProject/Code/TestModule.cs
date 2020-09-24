@@ -4,6 +4,7 @@ using Juicy.Inject.Injection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TestProject.Code.MappedService;
 
 namespace TestProject.Code {
     public class TestModule : AbstractModule {
@@ -21,6 +22,10 @@ namespace TestProject.Code {
                 .To<MultiImplService2>();
             BindFactory<IOtherServiceFactory>() //
                 .Implement<IOtherService, OtherServiceImpl>();
+            BindDictionary<Dictionary<MappedServiceTypes, IMappedService>>()
+                .To(MappedServiceTypes.One, typeof(MappedService1))
+                .To(MappedServiceTypes.Two, typeof(MappedService2))
+                .In(BindingScope.Singleton);
 
             Install(new NestedTestModule());
         }
