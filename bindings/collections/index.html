@@ -312,6 +312,20 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#list-set-bindings" class="md-nav__link">
+    List / Set Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dictionary-bindings" class="md-nav__link">
+    Dictionary Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#using-with-untargeted-bindings" class="md-nav__link">
     Using with Untargeted Bindings
   </a>
@@ -329,6 +343,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../dictionaries/" title="Dictionaries" class="md-nav__link">
+      Dictionaries
+    </a>
   </li>
 
         
@@ -397,6 +423,20 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#list-set-bindings" class="md-nav__link">
+    List / Set Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dictionary-bindings" class="md-nav__link">
+    Dictionary Bindings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#using-with-untargeted-bindings" class="md-nav__link">
     Using with Untargeted Bindings
   </a>
@@ -431,24 +471,42 @@
                 
                 
                 <h1 id="collection-bindings">Collection Bindings<a class="headerlink" href="#collection-bindings" title="Permanent link">&para;</a></h1>
-<p>Collection bindings make use of the <code>BindMany&lt;T&gt;()</code> method within a module. They allow you to bind multiple implementations of a service together.</p>
+<p>Collection bindings make use of the <code>BindMany&lt;T&gt;()</code> or <code>BindDictionary&lt;T&gt;()</code> methods within a module. They involve creating one-to-many bindings.</p>
+<h2 id="list-set-bindings">List / Set Bindings<a class="headerlink" href="#list-set-bindings" title="Permanent link">&para;</a></h2>
+<p>List and set bindings make use of the <code>BindMany&lt;T&gt;()</code> method within a module. They allow you to bundle implementations of a service together.</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">BindMany</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">ICommand</span><span class="p">&gt;&gt;()</span>
     <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">InitializeCommand</span><span class="p">&gt;()</span>
     <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">PauseCommand</span><span class="p">&gt;()</span>
     <span class="p">.</span><span class="n">To</span><span class="p">&lt;</span><span class="n">StartCommand</span><span class="p">&gt;()</span>
     <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
 </code></pre></div>
-You must use the same type specified in the original <code>BindMany&lt;T&gt;()</code> call in order to have the values injected.</p>
 <div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ServiceImpl</span> <span class="p">{</span>
     <span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">ICommand</span><span class="p">&gt;</span> <span class="n">commands</span><span class="p">;</span>
 
-    <span class="k">private</span> <span class="nf">ServiceImpl</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">ICommand</span><span class="p">&gt;</span> <span class="n">commands</span><span class="p">)</span> <span class="p">{</span>
+<span class="na">    [Inject]</span>
+    <span class="k">public</span> <span class="nf">ServiceImpl</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">ICommand</span><span class="p">&gt;</span> <span class="n">commands</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="n">commands</span> <span class="p">=</span> <span class="n">commands</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="p">...</span>
 <span class="p">}</span>
+</code></pre></div></p>
+<h2 id="dictionary-bindings">Dictionary Bindings<a class="headerlink" href="#dictionary-bindings" title="Permanent link">&para;</a></h2>
+<p>Dictionary bindings make use of the <code>BindDictionary&lt;T&gt;()</code> method within a module. They allow you to map implementations of a service to keys.</p>
+<p><div class="highlight"><pre><span></span><code><span class="n">BindDictionary</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">ICommand</span><span class="p">&gt;&gt;()</span>
+    <span class="p">.</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;StartCommand&quot;</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="n">StartCommand</span><span class="p">))</span>
+    <span class="p">.</span><span class="n">To</span><span class="p">(</span><span class="s">&quot;StopCommand&quot;</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="n">StopCommand</span><span class="p">))</span>
+    <span class="p">.</span><span class="n">In</span><span class="p">(</span><span class="n">BindingScope</span><span class="p">.</span><span class="n">Singleton</span><span class="p">);</span>
 </code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">ServiceImpl</span> <span class="p">{</span>
+    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">ICommand</span><span class="p">&gt;</span> <span class="n">commands</span><span class="p">;</span>
 
+<span class="na">    [Inject]</span>
+    <span class="k">public</span> <span class="nf">ServiceImpl</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">ICommand</span><span class="p">&gt;</span> <span class="n">commands</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">commands</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span>
+    <span class="p">}</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div></p>
 <h2 id="using-with-untargeted-bindings">Using with Untargeted Bindings<a class="headerlink" href="#using-with-untargeted-bindings" title="Permanent link">&para;</a></h2>
 <p><a href="../explicit/#untargeted">Untargeted Bindings</a> can be used in conjunction with collection bindings to determine how the individual implementing types are instantiated.</p>
 <p>In the above example, the <code>List&lt;ICommand&gt;</code> is bound as a singleton, so the <em>entire</em> list of values is cached after it is created. If you decided to inject a single command into another class, it would default to being instance-scoped.</p>
@@ -463,6 +521,7 @@ You must use the same type specified in the original <code>BindMany&lt;T&gt;()</
 The <code>PauseCommand</code> will now share its instance with the <code>List&lt;ICommand&gt;</code> binding, regardless of the order in which they are requested.</p>
 <h2 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h2>
 <p>The type provided when calling <code>BindMany&lt;T&gt;()</code> must inherit from <code>IEnumerable</code> <strong>AND</strong> have an <code>Add(value)</code> method.</p>
+<p>You <strong>must</strong> use the same type specified in the original <code>Bind...&lt;T&gt;()</code> call in order to have values injected.</p>
                 
               
               
@@ -496,13 +555,13 @@ The <code>PauseCommand</code> will now share its instance with the <code>List&lt
           </a>
         
         
-          <a href="../factories/" title="Factories" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../dictionaries/" title="Dictionaries" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Factories
+                Dictionaries
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
