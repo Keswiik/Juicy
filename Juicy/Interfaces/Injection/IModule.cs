@@ -17,12 +17,14 @@ namespace Juicy.Interfaces.Injection {
         ConcreteBinding.ConcreteBindingBuilder Bind<T>();
 
         /// <summary>
-        /// Bind <typeparamref name="T"/> to several implementations.
+        /// Binds <typeparamref name="T"/> to several keyed implementations.
         /// </summary>
-        /// <remarks>The injected type <b>must</b> match <typeparamref name="T"/>, otherwise binding will fail.</remarks>
-        /// <typeparam name="T">The type being bound.</typeparam>
-        /// <returns>A binding builder for collection bindings.</returns>
-        CollectionBinding.CollectionBindingBuilder BindMany<T>() where T : IEnumerable;
+        /// <remarks>
+        /// The injected type <b>must</b> match <typeparamref name="T"/>, otherwise binding will fail.
+        /// </remarks>
+        /// <typeparam name="T">The IDictionary implementation to bind values to.</typeparam>
+        /// <returns>A binding builder for map bindings.</returns>
+        DictionaryBinding.DictionaryBindingBuilder BindDictionary<T>() where T : IDictionary;
 
         /// <summary>
         /// Binds a factory that uses injection to create instances of another type.
@@ -31,6 +33,14 @@ namespace Juicy.Interfaces.Injection {
         /// <typeparam name="T">The interface that the factory will be bound to.</typeparam>
         /// <returns>A binding builder for factory bindings.</returns>
         FactoryBinding.FactoryBindingBuilder BindFactory<T>();
+
+        /// <summary>
+        /// Bind <typeparamref name="T"/> to several implementations.
+        /// </summary>
+        /// <remarks>The injected type <b>must</b> match <typeparamref name="T"/>, otherwise binding will fail.</remarks>
+        /// <typeparam name="T">The type being bound.</typeparam>
+        /// <returns>A binding builder for collection bindings.</returns>
+        CollectionBinding.CollectionBindingBuilder BindMany<T>() where T : IEnumerable;
 
         /// <summary>
         /// Installs bindings from an external module.

@@ -36,6 +36,12 @@ namespace Juicy.Inject.Injection {
             return builder;
         }
 
+        public DictionaryBinding.DictionaryBindingBuilder BindDictionary<T>() where T : IDictionary {
+            var builder = new DictionaryBinding.DictionaryBindingBuilder(typeof(T), BindingType.Dictionary, this);
+            BindingBuilders.Add(builder);
+            return builder;
+        }
+
         public CollectionBinding.CollectionBindingBuilder BindMany<T>() where T : IEnumerable {
             var builder =  new CollectionBinding.CollectionBindingBuilder(typeof(T), BindingType.Collection, this);
             BindingBuilders.Add(builder);

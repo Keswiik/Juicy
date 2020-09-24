@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using TestProject.Code;
+using TestProject.Code.MappedService;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Reflector {
 
@@ -47,6 +50,13 @@ namespace Reflector {
             var externallyProvidedService = injector.Get<IExternallyProvidedService>();
             Console.WriteLine($"String from externally provided service: {externallyProvidedService.GetPrintString()}");
             Console.WriteLine($"Same instance of externally provided service received: {externallyProvidedService == injector.Get<IExternallyProvidedService>()}.");
+
+            Console.WriteLine();
+            var mappedServices = injector.Get<Dictionary<MappedServiceTypes, IMappedService>>();
+            foreach (var type in Enum.GetValues(typeof(MappedServiceTypes)).Cast<MappedServiceTypes>()) {
+                var mappedService = mappedServices[type];
+                mappedService.DoSomething();
+            }
 #if DEBUG
             Console.ReadLine();
 #endif
