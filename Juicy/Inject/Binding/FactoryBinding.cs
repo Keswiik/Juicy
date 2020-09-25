@@ -31,6 +31,8 @@ namespace Juicy.Inject.Binding {
                 throw new InvalidBindingException($"Factory type {BaseType.Name} is not an interface.");
             } else if (!GenericType.IsAssignableFrom(ImplementationType)) {
                 throw new InvalidBindingException($"{ImplementationType.Name} is not a subclass of the base type {GenericType.Name}.");
+            } else if (ImplementationType.IsInterface || ImplementationType.IsAbstract) {
+                throw new InvalidBindingException($"{ImplementationType.Name} cannot be instantiated, it is either an interface or abstract class.");
             }
         }
 

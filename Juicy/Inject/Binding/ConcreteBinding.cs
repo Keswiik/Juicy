@@ -42,6 +42,8 @@ namespace Juicy.Inject.Binding {
                 throw new InvalidBindingException($"{BaseType.Name} is bound to a provider but has a BindingType of {Enum.GetName(typeof(BindingType), Type)}.");
             } else if (!BaseType.IsAssignableFrom(ImplementationType)) {
                 throw new InvalidBindingException($"{ImplementationType.Name} is not a subclass of the base type {BaseType.Name}.");
+            } else if (ImplementationType.IsInterface || ImplementationType.IsAbstract) {
+                throw new InvalidBindingException($"{ImplementationType.Name} cannot be instantiated, it is either an interface or abstract class.");
             }
         }
 

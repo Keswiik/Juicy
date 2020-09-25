@@ -29,6 +29,8 @@ namespace Juicy.Inject.Binding {
                     throw new InvalidBindingException($"Key of type {key.GetType().Name} cannot be assigned to {keyType.Name}.");
                 } else if (!type.IsAssignableFrom(ImplementationTypes[key])) {
                     throw new InvalidOperationException($"Value of type {ImplementationTypes[key].Name} is not a subclass of the base type {type.Name}.");
+                } else if (type.IsInterface || type.IsAbstract) {
+                    throw new InvalidBindingException($"{type.Name} cannot be instantiated, it is either an interface or abstract class.");
                 }
             }
         }

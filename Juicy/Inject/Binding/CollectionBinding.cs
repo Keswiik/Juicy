@@ -28,6 +28,8 @@ namespace Juicy.Inject.Binding {
             foreach (var type in ImplementationTypes) {
                 if (!baseType.IsAssignableFrom(type)) {
                     throw new InvalidBindingException($"{type.Name} is not a subclass of the base type {baseType.Name}.");
+                } else if (type.IsInterface || type.IsAbstract) {
+                    throw new InvalidBindingException($"{type.Name} cannot be instantiated, it is either an interface or abstract class.");
                 }
             }
         }
