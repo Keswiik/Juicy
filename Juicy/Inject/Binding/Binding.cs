@@ -7,7 +7,7 @@ using System;
 namespace Juicy.Inject.Binding {
 
     ///<inheritdoc cref="IBinding"/>
-    public class Binding : IBinding {
+    public abstract class Binding : IBinding {
         public Type BaseType { get; }
 
         public BindingScope Scope { get; }
@@ -29,6 +29,8 @@ namespace Juicy.Inject.Binding {
             Name = component.Name;
             Module = component.Module;
         }
+
+        protected abstract void Validate();
 
         #region Builder
 
@@ -109,19 +111,6 @@ namespace Juicy.Inject.Binding {
             public T Attributed<A>() where A : BindingAttribute {
                 Name = typeof(A).FullName;
                 return this as T;
-            }
-        }
-
-        /// <summary>
-        /// True "implementation" of the builder that will be used externally.
-        /// </summary>
-        public class BindingBuilder : BindingComponent<BindingBuilder>, IBuilder {
-
-            protected BindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
-            }
-
-            IBinding IBuilder.Build() {
-                return new Binding(this);
             }
         }
 

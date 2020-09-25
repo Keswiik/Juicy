@@ -1,4 +1,5 @@
 ﻿using Juicy.Constants;
+using Juicy.Inject.Exceptions;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
@@ -21,12 +22,22 @@ namespace Juicy.Inject.Binding {
         private FactoryBinding(IFactoryBindingComponent component) : base(component) {
             GenericType = component.GenericType;
             ImplementationType = component.ImplementationType;
+
+            Validate();
+        }
+
+        protected override void Validate() {
+            if (!BaseType.IsInterface) {
+                throw new InvalidBindingException($"Factory type {BaseType.Name} is not an interface.");
+            } else if (!GenericType.IsAssignableFrom(ImplementationType)) {
+                throw new InvalidBindingException($"{ImplementationType.Name} is not a subclass of the base type {GenericType.Name}.");
+            }
         }
 
         #region Builder
 
         /// <inheritdoc/>
-        private interface IFactoryBindingComponent : Binding.IBindingBuilderComponent {
+        private interface IFactoryBindingComponent : IBindingBuilderComponent {
 
             internal Type GenericType { get; }
 
