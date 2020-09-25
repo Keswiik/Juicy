@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Juicy.Inject.Injection.Provide;
+using Juicy.Inject.Exceptions;
 
 namespace Juicy.Inject.Binding {
 
@@ -29,6 +30,20 @@ namespace Juicy.Inject.Binding {
             // check for untargeted bindings and update accordingly
             if (Instance == null && ImplementationType == null) {
                 ImplementationType = BaseType;
+            }
+
+            Validate();
+        }
+
+        protected override void Validate() {
+            if (Instance != null && Scope == BindingScope.Instance) {
+                throw new InvalidBindingException($"{BaseType.Name} is bound to an instance with the scope of BindingScope.Instance.");
+            } else if (Provider != null && Type != BindingType.Provider) {
+                throw new InvalidBindingException($"{BaseType.Name} is bound to a provider but has a BindingType of {Enum.GetName(typeof(BindingType), Type)}.");
+            } else if (!BaseType.IsAssignableFrom(ImplementationType)) {
+                throw new InvalidBindingException($"{ImplementationType.Name} is not a subclass of the base type {BaseType.Name}.");
+            } else if (ImplementationType.IsInterface || ImplementationType.IsAbstract) {
+                throw new InvalidBindingException($"{ImplementationType.Name} cannot be instantiated, it is either an interface or abstract class.");
             }
         }
 
@@ -79,6 +94,7 @@ namespace Juicy.Inject.Binding {
                 Instance = instance;
                 Provider = null;
                 ImplementationType = instance.GetType();
+                BindingType = BindingType.Concrete;
                 BindingScope = BindingScope.Singleton;
                 return this as T;
             }

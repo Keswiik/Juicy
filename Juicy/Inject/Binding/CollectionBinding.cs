@@ -1,4 +1,5 @@
 ﻿using Juicy.Constants;
+using Juicy.Inject.Exceptions;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
@@ -18,6 +19,19 @@ namespace Juicy.Inject.Binding {
         /// <param name="component">The component to pull method information from.</param>
         private CollectionBinding(ICollectionBindingComponent component) : base(component) {
             ImplementationTypes = component.ImplementationTypes;
+
+            Validate();
+        }
+
+        protected override void Validate() {
+            var baseType = BaseType.GenericTypeArguments[0];
+            foreach (var type in ImplementationTypes) {
+                if (!baseType.IsAssignableFrom(type)) {
+                    throw new InvalidBindingException($"{type.Name} is not a subclass of the base type {baseType.Name}.");
+                } else if (type.IsInterface || type.IsAbstract) {
+                    throw new InvalidBindingException($"{type.Name} cannot be instantiated, it is either an interface or abstract class.");
+                }
+            }
         }
 
         #region Builder

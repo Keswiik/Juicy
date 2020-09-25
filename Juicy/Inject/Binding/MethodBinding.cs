@@ -21,6 +21,9 @@ namespace Juicy.Inject.Binding {
             Method = component._Method;
         }
 
+        // don't know much about this until runtime, can't validate.
+        protected override void Validate() {}
+
         #region Builder
 
         /// <inheritdoc/>

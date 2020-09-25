@@ -1,4 +1,5 @@
 ﻿using Juicy.Constants;
+using Juicy.Inject.Exceptions;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
@@ -15,6 +16,23 @@ namespace Juicy.Inject.Binding {
 
         private DictionaryBinding(IDictionaryBindingComponent component) : base(component) {
             ImplementationTypes = component.ImplementationTypes;
+
+            Validate();
+        }
+
+        protected override void Validate() {
+            var keyType = BaseType.GenericTypeArguments[0];
+            var type = BaseType.GenericTypeArguments[1];
+
+            foreach (var key in ImplementationTypes.Keys) {
+                if (!keyType.IsAssignableFrom(key.GetType())) {
+                    throw new InvalidBindingException($"Key of type {key.GetType().Name} cannot be assigned to {keyType.Name}.");
+                } else if (!type.IsAssignableFrom(ImplementationTypes[key])) {
+                    throw new InvalidOperationException($"Value of type {ImplementationTypes[key].Name} is not a subclass of the base type {type.Name}.");
+                } else if (type.IsInterface || type.IsAbstract) {
+                    throw new InvalidBindingException($"{type.Name} cannot be instantiated, it is either an interface or abstract class.");
+                }
+            }
         }
 
         #region Builder
