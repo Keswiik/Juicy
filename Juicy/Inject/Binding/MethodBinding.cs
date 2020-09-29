@@ -28,14 +28,12 @@ namespace Juicy.Inject.Binding {
 
         /// <inheritdoc/>
         private interface IMethodBindingComponent : Binding.IBindingBuilderComponent {
-            internal ICachedMethod _Method { get; }
+            ICachedMethod _Method { get; }
         }
 
         /// <inheritdoc/>
         public abstract class MethodBindingComponent<T> : BindingComponent<T>, IMethodBindingComponent where T : MethodBindingComponent<T> {
-            ICachedMethod IMethodBindingComponent._Method => _Method;
-
-            private ICachedMethod _Method { get; set; }
+            public ICachedMethod _Method { get; private set; }
 
             internal MethodBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 

@@ -38,14 +38,11 @@ namespace Juicy.Inject.Binding {
 
         /// <inheritdoc/>
         private interface ICollectionBindingComponent : IBindingBuilderComponent {
-            internal List<Type> ImplementationTypes { get; }
+            List<Type> ImplementationTypes { get; }
         }
 
         /// <inheritdoc/>
         public class CollectionBindingComponent<T> : BindingComponent<T>, ICollectionBindingComponent where T : CollectionBindingComponent<T> {
-
-            List<Type> ICollectionBindingComponent.ImplementationTypes => ImplementationTypes;
-
             public List<Type> ImplementationTypes { get; }
 
             internal CollectionBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {

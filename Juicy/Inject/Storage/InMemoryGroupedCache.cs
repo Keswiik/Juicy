@@ -4,7 +4,7 @@ using System.Collections.Generic;
  namespace Juicy.Inject.Storage {
     
     /// <inheritdoc cref="IGroupedCache{T, K}"/>
-    internal class GroupedCache<T, K> : IGroupedCache<T, K> {
+    internal sealed class InMemoryGroupedCache<T, K> : IGroupedCache<T, K> {
         
         private Dictionary<K, T> Dictionary { get; }
 
@@ -12,24 +12,24 @@ using System.Collections.Generic;
 
         private bool DefaultCached { get; set; }
 
-        internal GroupedCache() {
+        internal InMemoryGroupedCache() {
             Dictionary = new Dictionary<K, T>();
         }
 
-        void IGroupedCache<T, K>.Cache(T value) {
+        public void Cache(T value) {
             DefaultValue = value;
             DefaultCached = true;
         }
 
-        void IGroupedCache<T, K>.Cache(T value, K key) {
+        public void Cache(T value, K key) {
             Dictionary[key] = value;
         }
 
-        T IGroupedCache<T, K>.Get() {
+        public T Get() {
             return DefaultValue;
         }
 
-        T IGroupedCache<T, K>.Get(K key) {
+        public T Get(K key) {
             return Dictionary.ContainsKey(key) ? Dictionary[key] : default;
         }
 

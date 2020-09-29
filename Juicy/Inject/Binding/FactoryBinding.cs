@@ -40,21 +40,16 @@ namespace Juicy.Inject.Binding {
 
         /// <inheritdoc/>
         private interface IFactoryBindingComponent : IBindingBuilderComponent {
+            Type GenericType { get; }
 
-            internal Type GenericType { get; }
-
-            internal Type ImplementationType { get; }
+            Type ImplementationType { get; }
         }
 
         /// <inheritdoc/>
         public abstract class FactoryBindingComponent<T> : BindingComponent<T>, IFactoryBindingComponent where T : FactoryBindingComponent<T> {
-            Type IFactoryBindingComponent.GenericType => GenericType;
+            public Type GenericType { get; private set; }
 
-            Type IFactoryBindingComponent.ImplementationType => ImplementationType;
-
-            private Type GenericType { get; set; }
-
-            private Type ImplementationType { get; set; }
+            public Type ImplementationType { get; private set; }
 
             internal FactoryBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 

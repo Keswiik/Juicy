@@ -23,7 +23,7 @@ namespace Juicy.Inject.Injection {
             Reflector = reflector;
         }
 
-        List<IBinding> IMethodBindingFactory.CreateBindings(IModule module) {
+        public List<IBinding> CreateBindings(IModule module) {
             List<ICachedMethod> providedMethods = Reflector.GetAttributedMethods(module.GetType(), ProvidesAttributeType);
             if (providedMethods.Count == 0) {
                 return new List<IBinding>();

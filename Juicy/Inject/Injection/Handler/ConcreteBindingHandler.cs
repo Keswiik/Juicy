@@ -10,7 +10,7 @@ namespace Juicy.Inject.Injection.Handler {
     /// <summary>
     /// Handler used to create injections based on <see cref="ConcreteBinding"/>
     /// </summary>
-    internal class ConcreteBindingHandler : IBindingHandler {
+    internal sealed class ConcreteBindingHandler : IBindingHandler {
 
         private Injector Injector { get; }
 
@@ -26,7 +26,7 @@ namespace Juicy.Inject.Injection.Handler {
             Creator = creator;
         }
 
-        object IBindingHandler.Handle(IBinding binding, Type type, string name) {
+        public object Handle(IBinding binding, Type type, string name) {
             var concreteBinding = binding as ConcreteBinding;
             bool hitCache = concreteBinding.Scope == Constants.BindingScope.Singleton;
             bool isCached = Injector.IsCached(concreteBinding.ImplementationType, concreteBinding.Name);
@@ -43,7 +43,7 @@ namespace Juicy.Inject.Injection.Handler {
             return Injector.GetInstance(concreteBinding.ImplementationType, concreteBinding.Name);
         }
 
-        void IBindingHandler.Initialize(IBinding binding) {
+        public void Initialize(IBinding binding) {
             // no reason to set bindings against null (which will happen when binding to a type). Just return instead.
             object instance = (binding as ConcreteBinding)?.Instance;
             if (instance == null) {

@@ -11,7 +11,7 @@ namespace Juicy.Inject.Injection.Handler {
     /// <summary>
     /// Handler used to create injections based on <see cref="FactoryBinding"/>.
     /// </summary>
-    internal class FactoryBindingHandler : IBindingHandler {
+    internal sealed class FactoryBindingHandler : IBindingHandler {
         private readonly static MethodInfo CreateProxyMethod = typeof(DispatchProxy).GetMethod("Create");
 
         private ICreator Creator { get; }
@@ -23,7 +23,7 @@ namespace Juicy.Inject.Injection.Handler {
             Creator = creator;
         }
 
-        object IBindingHandler.Handle(IBinding binding, Type type, string name) {
+        public object Handle(IBinding binding, Type type, string name) {
             var factoryBinding = binding as FactoryBinding;
             bool isCached = Injector.IsCached(factoryBinding.BaseType, factoryBinding.Name);
             if (!isCached) {
@@ -36,7 +36,7 @@ namespace Juicy.Inject.Injection.Handler {
             return Injector.GetInstance(factoryBinding.BaseType, factoryBinding.Name);
         }
 
-        void IBindingHandler.Initialize(IBinding binding) { }
+        public void Initialize(IBinding binding) { }
 
         private object MakeProxy(Type proxyType, Type resultType) {
             // the proxy is able to mimic proxyType at runtime, which will be the injected value

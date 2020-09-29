@@ -25,7 +25,7 @@ namespace Juicy.Inject.Injection {
             Reflector = reflector;
         }
 
-        object IMethodInvoker.Invoke(object instance, ICachedMethod method) {
+        public object Invoke(object instance, ICachedMethod method) {
             // no need to check anything if the method has no parameters, just return fast
             if (method.Parameters.Count == 0) {
                 return Reflector.Invoke(method, instance);

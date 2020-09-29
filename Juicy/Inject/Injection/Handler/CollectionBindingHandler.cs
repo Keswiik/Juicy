@@ -11,7 +11,7 @@ namespace Juicy.Inject.Injection.Handler {
     /// <summary>
     /// Handler used to create injections based on <see cref="CollectionBinding"/>.
     /// </summary>
-    internal class CollectionBindingHandler : IBindingHandler {
+    internal sealed class CollectionBindingHandler : IBindingHandler {
 
         private Injector Injector { get; }
 
@@ -23,7 +23,7 @@ namespace Juicy.Inject.Injection.Handler {
             Injector = injector;
         }
 
-        object IBindingHandler.Handle(IBinding binding, Type type, string name) {
+        public object Handle(IBinding binding, Type type, string name) {
             var collectionBinding = binding as CollectionBinding;
             bool hitCache = collectionBinding.Scope == Constants.BindingScope.Singleton;
             bool isCached = Injector.IsCached(collectionBinding.BaseType, collectionBinding.Name);
@@ -46,6 +46,6 @@ namespace Juicy.Inject.Injection.Handler {
             return Injector.GetInstance(collectionBinding.BaseType, collectionBinding.Name);
         }
 
-        void IBindingHandler.Initialize(IBinding binding) { }
+        public void Initialize(IBinding binding) { }
     }
 }

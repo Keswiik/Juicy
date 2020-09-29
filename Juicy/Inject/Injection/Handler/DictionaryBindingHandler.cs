@@ -13,7 +13,7 @@ namespace Juicy.Inject.Injection.Handler {
     /// <summary>
     /// Handler used to create injections based on <see cref="DictionaryBinding"/>.
     /// </summary>
-    sealed internal class DictionaryBindingHandler : IBindingHandler {
+    internal sealed class DictionaryBindingHandler : IBindingHandler {
 
         private Injector Injector { get; }
 
@@ -36,7 +36,7 @@ namespace Juicy.Inject.Injection.Handler {
          *      Loop over all keys, request instance of implementing types from the injector
          *      Cache dictionary if necessary
          */
-        object IBindingHandler.Handle(IBinding binding, Type type, string name) {
+        public object Handle(IBinding binding, Type type, string name) {
             var mapBinding = binding as DictionaryBinding;
             var hitCache = mapBinding.Scope == BindingScope.Singleton;
             var isCached = Injector.IsCached(mapBinding.BaseType, mapBinding.Name);
@@ -58,7 +58,6 @@ namespace Juicy.Inject.Injection.Handler {
             return Injector.GetInstance(mapBinding.BaseType, mapBinding.Name);
         }
 
-        void IBindingHandler.Initialize(IBinding binding) {
-        }
+        public void Initialize(IBinding binding) { }
     }
 }

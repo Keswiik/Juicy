@@ -46,9 +46,9 @@ namespace Juicy.Inject.Injection {
         /// <param name="modules">The modules to get bindings from.</param>
         internal Injector(Injector parentInjector, params AbstractModule[] modules) {
             ParentInjector = parentInjector;
-            BindingCache = new Cache<IBinding, Type, string>();
-            InstanceCache = new Cache<object, Type, string>();
-            ProviderCache = new Cache<Provider, Type, string>();
+            BindingCache = new InMemoryCache<IBinding, Type, string>();
+            InstanceCache = new InMemoryCache<object, Type, string>();
+            ProviderCache = new InMemoryCache<Provider, Type, string>();
 
             var reflector = new Reflector();
             Creator = new Creator(this, reflector);

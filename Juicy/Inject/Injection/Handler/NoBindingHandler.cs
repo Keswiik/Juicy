@@ -15,7 +15,7 @@ namespace Juicy.Inject.Injection.Handler {
     /// <remarks>
     /// Usage of this handler usually involves injecting either <see cref="IProvider{T}"/> or a concrete class with no explicit binding specified.
     /// </remarks>
-    internal class NoBindingHandler : IBindingHandler {
+    internal sealed class NoBindingHandler : IBindingHandler {
 
         private readonly static Type ProviderType = typeof(IProvider<>);
 
@@ -45,7 +45,7 @@ namespace Juicy.Inject.Injection.Handler {
          *      If it isn't a provider, and we have a parent injector, pass the request up
          *      If we have no parent injector and the request is for a a non-value type that is can be created, try to create it
          */
-        object IBindingHandler.Handle(IBinding binding, Type type, string name) {
+        public object Handle(IBinding binding, Type type, string name) {
             if (IsProvider(type)) {
 
                 // providers should ALWAYS be cached after they are created. No reason to create multiple for the same type.
@@ -76,7 +76,7 @@ namespace Juicy.Inject.Injection.Handler {
             }
         }
 
-        void IBindingHandler.Initialize(IBinding binding) { }
+        public void Initialize(IBinding binding) { }
 
         private bool IsProvider(Type type) {
             return type.IsGenericType && type.GetGenericTypeDefinition() == ProviderType;

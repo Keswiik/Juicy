@@ -15,6 +15,6 @@ namespace Juicy.Interfaces.Injection {
         /// </summary>
         /// <param name="module">The module to search for methods in.</param>
         /// <returns>A list of bindings which may be empty.</returns>
-        internal List<IBinding> CreateBindings(IModule module);
+        List<IBinding> CreateBindings(IModule module);
     }
 }

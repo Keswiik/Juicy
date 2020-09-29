@@ -10,7 +10,7 @@ namespace Juicy.Inject.Injection.Handler {
     /// <summary>
     /// Handler used to create injections when a concrete type is explicitly bound to an implementation of <c>IProvider</c>.
     /// </summary>
-    internal class ProviderBindingHandler : IBindingHandler {
+    internal sealed class ProviderBindingHandler : IBindingHandler {
 
         private Injector Injector { get; }
 
@@ -30,7 +30,7 @@ namespace Juicy.Inject.Injection.Handler {
          *          Get value from provider
          *          Cache the new value and return it
          */
-        object IBindingHandler.Handle(IBinding binding, Type type, string name) {
+        public object Handle(IBinding binding, Type type, string name) {
             var concreteBinding = binding as ConcreteBinding;
             var hitCache = concreteBinding.Scope == Constants.BindingScope.Singleton;
             var isCached = Injector.IsCached(concreteBinding.ImplementationType, concreteBinding.Name);
@@ -69,7 +69,7 @@ namespace Juicy.Inject.Injection.Handler {
             }
         }
 
-        void IBindingHandler.Initialize(IBinding binding) {
+        public void Initialize(IBinding binding) {
         }
     }
 }

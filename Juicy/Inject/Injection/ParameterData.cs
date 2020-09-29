@@ -7,13 +7,9 @@ namespace Juicy.Inject.Injection {
 
     /// <inheritdoc cref="IParameterData"/>
     internal class ParameterData : IParameterData {
-        string IParameterData.Name => Name;
+        public string Name { get; }
 
-        object IParameterData.Value => Value;
-
-        private string Name { get; }
-
-        private object Value { get; }
+        public object Value { get; }
 
         internal ParameterData(string name, object value) {
             Name = name;

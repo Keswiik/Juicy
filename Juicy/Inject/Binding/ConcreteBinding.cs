@@ -42,33 +42,27 @@ namespace Juicy.Inject.Binding {
                 throw new InvalidBindingException($"{BaseType.Name} is bound to a provider but has a BindingType of {Enum.GetName(typeof(BindingType), Type)}.");
             } else if (!BaseType.IsAssignableFrom(ImplementationType)) {
                 throw new InvalidBindingException($"{ImplementationType.Name} is not a subclass of the base type {BaseType.Name}.");
-            } else if (ImplementationType.IsInterface || ImplementationType.IsAbstract) {
+            } else if (Type == BindingType.Concrete && (ImplementationType.IsInterface || ImplementationType.IsAbstract)) {
                 throw new InvalidBindingException($"{ImplementationType.Name} cannot be instantiated, it is either an interface or abstract class.");
             }
         }
 
         /// <inheritdoc/>
         private interface IConcreteBindingComponent : IBindingBuilderComponent {
-            internal Type ImplementationType { get; }
+            Type ImplementationType { get; }
 
-            internal object Instance { get; }
+            object Instance { get; }
 
-            internal Type Provider { get; }
+            Type Provider { get; }
         }
 
         /// <inheritdoc/>
         public abstract class ConcreteBindingComponent<T> : BindingComponent<T>, IConcreteBindingComponent where T : ConcreteBindingComponent<T> {
-            Type IConcreteBindingComponent.ImplementationType => ImplementationType;
+            public Type ImplementationType { get; private set; }
 
-            object IConcreteBindingComponent.Instance => Instance;
+            public object Instance { get; private set; }
 
-            Type IConcreteBindingComponent.Provider => Provider;
-
-            private Type ImplementationType { get; set; }
-
-            private object Instance { get; set; }
-
-            private Type Provider { get; set; }
+            public  Type Provider { get; private set; }
 
             internal ConcreteBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 
