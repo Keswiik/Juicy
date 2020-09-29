@@ -66,27 +66,11 @@ namespace Juicy.Inject.Injection {
                 { BindingType.Provider, new ProviderBindingHandler(this) }
             };
 
-            Queue<AbstractModule> moduleInstallationQueue = new Queue<AbstractModule>(modules);
 
-            while (moduleInstallationQueue.Count > 0) {
-                var module = moduleInstallationQueue.Dequeue();
-                module.Configure();
-
-                var bindings = new List<IBinding>();
-                if (module is OverrideModule) {
-                    bindings.AddRange(module.GetBindings());
-                } else {
-                    bindings.AddRange(MethodBindingFactory.CreateBindings(module));
-                    bindings.AddRange(module.GetBindings());
-                }
-
-                foreach (IBinding binding in bindings) {
+            foreach (AbstractModule module in modules) {
+                foreach (IBinding binding in module.GetBindings()) {
                     CacheBinding(binding);
                     BindingHandlers[binding.Type].Initialize(binding);
-                }
-
-                foreach (var childModule in module.InstalledModules) {
-                    moduleInstallationQueue.Enqueue(childModule);
                 }
             }
 
