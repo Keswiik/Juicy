@@ -2,6 +2,7 @@
 using Juicy.Inject.Binding;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,20 +14,14 @@ namespace Juicy.Inject.Injection.Handler {
     /// <summary>
     /// Handler used to create injections based on <see cref="DictionaryBinding"/>.
     /// </summary>
-    internal sealed class DictionaryBindingHandler : IBindingHandler {
-
-        private Injector Injector { get; }
-
-        private ICreator Creator { get; }
+    internal sealed class DictionaryBindingHandler : AbstractBindingHander {
 
         /// <summary>
         /// Creates a new dictionary binding handler.
         /// </summary>
         /// <param name="injector">The injector to forward implementing type requests to.</param>
         /// <param name="creator">The creator to use.</param>
-        internal DictionaryBindingHandler(Injector injector, ICreator creator) {
-            Injector = injector;
-            Creator = creator;
+        internal DictionaryBindingHandler(Injector injector, ILoggerFactory loggerFactory) : base(injector, loggerFactory) {
         }
 
         /*
@@ -36,28 +31,28 @@ namespace Juicy.Inject.Injection.Handler {
          *      Loop over all keys, request instance of implementing types from the injector
          *      Cache dictionary if necessary
          */
-        public object Handle(IBinding binding, Type type, string name) {
-            var mapBinding = binding as DictionaryBinding;
-            var hitCache = mapBinding.Scope == BindingScope.Singleton;
-            var isCached = Injector.IsCached(mapBinding.BaseType, mapBinding.Name);
+        public override object Handle(IBinding binding, Type type, string name) {
+            var dictionaryBinding = binding as DictionaryBinding;
+            var hitCache = dictionaryBinding.Scope == BindingScope.Singleton;
+            var isCached = Injector.IsCached(dictionaryBinding.BaseType, dictionaryBinding.Name);
 
             if (!hitCache || !isCached) {
-                IDictionary dictionary = (IDictionary)Activator.CreateInstance(mapBinding.BaseType);
-                foreach (var key in mapBinding.ImplementationTypes.Keys) {
-                    object instance = Injector.Get(mapBinding.ImplementationTypes[key], null);
+                logger?.LogTrace("Creating implementation for {Binding}.", dictionaryBinding);
+                IDictionary dictionary = (IDictionary)Activator.CreateInstance(dictionaryBinding.BaseType);
+                foreach (var key in dictionaryBinding.ImplementationTypes.Keys) {
+                    object instance = Injector.Get(dictionaryBinding.ImplementationTypes[key], null);
                     dictionary.Add(key, instance);
                 }
 
                 if (hitCache) {
-                    Injector.SetInstance(mapBinding, dictionary, mapBinding.BaseType, mapBinding.Name);
+                    logger?.LogTrace("Caching implementation for {Binding}.", dictionaryBinding);
+                    Injector.SetInstance(dictionaryBinding, dictionary, dictionaryBinding.BaseType, dictionaryBinding.Name);
                 }
 
                 return dictionary;
             }
 
-            return Injector.GetInstance(mapBinding.BaseType, mapBinding.Name);
+            return Injector.GetInstance(dictionaryBinding.BaseType, dictionaryBinding.Name);
         }
-
-        public void Initialize(IBinding binding) { }
     }
 }

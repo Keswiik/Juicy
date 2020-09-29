@@ -8,12 +8,28 @@ using TestProject.Code;
 using TestProject.Code.MappedService;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
+using Serilog.Extensions.Logging;
+using Serilog;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
 
 namespace Reflector {
 
     internal static class Program {
 
         private static void Main() {
+            //var configuration = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.json")
+            //    .Build();
+            //var logger = new LoggerConfiguration()
+            //    .ReadFrom.Configuration(configuration)
+            //    .CreateLogger();
+
+            //Juicer.AddLogging(new SerilogLoggerFactory(logger: logger));
+
             IInjector injector = Juicer.CreateInjector(new TestModule().Override(new ModuleToOverride()));
             IInjector injector2 = injector.Get<IInjector>();
             IInjector injector3 = injector.CreateChildInjector();

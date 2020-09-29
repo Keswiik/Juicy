@@ -21,6 +21,10 @@ namespace Juicy.Inject.Binding {
             Method = component._Method;
         }
 
+        public override string ToString() {
+            return $"MethodBinding[name={Name} scope={Enum.GetName(typeof(BindingScope), Scope)} baseType={BaseType.Name} method={Method.Name}]";
+        }
+
         // don't know much about this until runtime, can't validate.
         protected override void Validate() {}
 

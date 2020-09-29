@@ -8,6 +8,7 @@ using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using Juicy.Interfaces.Storage;
 using Juicy.Reflection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,21 +32,23 @@ namespace Juicy.Inject.Injection {
 
         private IMethodInvoker MethodInvoker { get; }
 
-        private IMethodBindingFactory MethodBindingFactory { get; }
+        private readonly ILogger logger;
+
+        private readonly ILoggerFactory loggerFactory;
 
 
         /// <summary>
         /// Creates the injector, initializes binding handlers, and gets all module bindings.
         /// </summary>
         /// <param name="modules">The modules to get bindings from.</param>
-        internal Injector(params AbstractModule[] modules) : this(null, modules) { }
+        internal Injector(ILoggerFactory loggerFactory, params AbstractModule[] modules) : this(null, loggerFactory, modules) { }
 
         /// <summary>
         /// Creates an injector with a parent to delegate requests to if there is no binding.
         /// </summary>
         /// <param name="parentInjector">The parent to this injector.</param>
         /// <param name="modules">The modules to get bindings from.</param>
-        internal Injector(Injector parentInjector, params AbstractModule[] modules) {
+        internal Injector(Injector parentInjector, ILoggerFactory loggerFactory, params AbstractModule[] modules) {
             ParentInjector = parentInjector;
             BindingCache = new InMemoryCache<IBinding, Type, string>();
             InstanceCache = new InMemoryCache<object, Type, string>();
@@ -54,21 +57,25 @@ namespace Juicy.Inject.Injection {
             var reflector = new Reflector();
             Creator = new Creator(this, reflector);
             MethodInvoker = new MethodInvoker(this, reflector);
-            MethodBindingFactory = new MethodBindingFactory(reflector);
+
+            this.loggerFactory = loggerFactory;
+            logger = loggerFactory?.CreateLogger(GetType().Name);
 
             BindingHandlers = new Dictionary<BindingType, IBindingHandler> {
-                { BindingType.Collection, new CollectionBindingHandler(this) },
-                { BindingType.Concrete, new ConcreteBindingHandler(this, Creator) },
-                { BindingType.Factory, new FactoryBindingHandler(this, Creator) },
-                { BindingType.Dictionary, new DictionaryBindingHandler(this, Creator) },
-                { BindingType.Method, new MethodBindingHandler(this, MethodInvoker) },
-                { BindingType.None, new NoBindingHandler(this, Creator) },
-                { BindingType.Provider, new ProviderBindingHandler(this) }
+                { BindingType.Collection, new CollectionBindingHandler(this, loggerFactory) },
+                { BindingType.Concrete, new ConcreteBindingHandler(this, loggerFactory, Creator) },
+                { BindingType.Dictionary, new DictionaryBindingHandler(this, loggerFactory) },
+                { BindingType.Factory, new FactoryBindingHandler(this, loggerFactory, Creator) },
+                { BindingType.Method, new MethodBindingHandler(this, loggerFactory, MethodInvoker) },
+                { BindingType.None, new NoBindingHandler(this, loggerFactory, Creator) },
+                { BindingType.Provider, new ProviderBindingHandler(this, loggerFactory) }
             };
 
 
             foreach (AbstractModule module in modules) {
+                logger?.LogTrace("Processing bindings for module of type {ModuleType}", module.GetType().Name);
                 foreach (IBinding binding in module.GetBindings()) {
+                    logger?.LogTrace("Resolved binding {Binding}", binding);
                     CacheBinding(binding);
                     BindingHandlers[binding.Type].Initialize(binding);
                 }
@@ -93,7 +100,7 @@ namespace Juicy.Inject.Injection {
         }
 
         public IInjector CreateChildInjector(params AbstractModule[] modules) {
-            return new Injector(this, modules);
+            return new Injector(this, loggerFactory, modules);
         }
 
         /// <summary>

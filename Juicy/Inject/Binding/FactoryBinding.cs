@@ -26,6 +26,10 @@ namespace Juicy.Inject.Binding {
             Validate();
         }
 
+        public override string ToString() {
+            return $"FactoryBinding[name={Name} scope={Enum.GetName(typeof(BindingScope), Scope)} factoryType={BaseType.Name} genericType={GenericType.Name} implementationType={ImplementationType.Name}]";
+        }
+
         protected override void Validate() {
             if (!BaseType.IsInterface) {
                 throw new InvalidBindingException($"Factory type {BaseType.Name} is not an interface.");

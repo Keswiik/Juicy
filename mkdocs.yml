@@ -40,6 +40,7 @@ markdown_extensions:
 
 nav:
   - 'Getting Started': index.md
+  - Logging: logging.md
   - Bindings:
     - Overview: bindings/overview.md
     - Explicit: bindings/explicit.md

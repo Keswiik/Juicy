@@ -35,6 +35,10 @@ namespace Juicy.Inject.Binding {
             Validate();
         }
 
+        public override string ToString() {
+            return $"ConcreteBinding[name={Name} scope={Enum.GetName(typeof(BindingScope), Scope)} baseType={BaseType.Name} implementation={ImplementationType.Name}]";
+        }
+
         protected override void Validate() {
             if (Instance != null && Scope == BindingScope.Instance) {
                 throw new InvalidBindingException($"{BaseType.Name} is bound to an instance with the scope of BindingScope.Instance.");
