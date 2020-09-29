@@ -31,7 +31,7 @@ namespace Juicy.Inject.Injection {
 
         internal override List<IBinding> GetBindings() {
             List<IBinding> bindings = new List<IBinding>();
-            bindings.AddRange(CreateBindings(BaseModule));
+            bindings.AddRange(BaseModule.GetBindings());
 
             // this will prevent 'silently' overriding bad bindings in the base module
             foreach (var binding in bindings) {
@@ -39,7 +39,7 @@ namespace Juicy.Inject.Injection {
             }
 
             List<IBinding> overriddenBindings = new List<IBinding>();
-            overriddenBindings.AddRange(CreateBindings(OverriddenModule));
+            overriddenBindings.AddRange(OverriddenModule.GetBindings());
 
             foreach (var binding in overriddenBindings) {
                 if (IsCached(binding.BaseType, binding.Name)) {
@@ -50,34 +50,6 @@ namespace Juicy.Inject.Injection {
                 CacheBinding(binding);
             }
 
-
-            return bindings;
-        }
-
-        public override void Configure() {
-        }
-
-        private List<IBinding> CreateBindings(AbstractModule module) {
-            // no additional logic is needed when retrieving bindings from another OverrideModule
-            if (module is OverrideModule) {
-                return module.GetBindings();
-            }
-
-            List<IBinding> bindings = new List<IBinding>();
-
-            Queue<AbstractModule> moduleQueue = new Queue<AbstractModule>();
-            moduleQueue.Enqueue(module);
-            while (moduleQueue.Count > 0) {
-                var queuedModule = moduleQueue.Dequeue();
-                queuedModule.Configure();
-                bindings.AddRange(queuedModule.GetBindings());
-                bindings.AddRange(MethodBindingFactory.CreateBindings(queuedModule));
-
-                foreach (var childModule in queuedModule.InstalledModules) {
-                    moduleQueue.Enqueue(childModule);
-                }
-            }
-            
 
             return bindings;
         }

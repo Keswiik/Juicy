@@ -2,6 +2,7 @@
 using Juicy.Inject.Binding;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
+using Juicy.Reflection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Juicy.Inject.Injection {
     /// Base module all consumers should inherit from.
     /// </summary>
     public abstract class AbstractModule : IModule {
+
+        private static readonly IMethodBindingFactory methodBindingFactory = new MethodBindingFactory(new Reflector());
 
         internal List<IBuilder> BindingBuilders { get; }
 
@@ -69,10 +72,17 @@ namespace Juicy.Inject.Injection {
         public virtual void Configure() { }
 
         virtual internal List<IBinding> GetBindings() {
+            Configure();
+
             List<IBinding> bindings = new List<IBinding>();
+            bindings.AddRange(methodBindingFactory.CreateBindings(this));
             foreach (IBuilder builder in BindingBuilders) {
                 bindings.Add(builder.Build());
             }
+            foreach (AbstractModule module in InstalledModules) {
+                bindings.AddRange(module.GetBindings());
+            }
+
 
             return bindings;
         }
