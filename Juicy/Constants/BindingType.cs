@@ -1,9 +1,4 @@
-﻿using Juicy.Inject.Binding;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Juicy.Constants {
+﻿namespace Juicy.Constants {
 
     /// <summary>
     /// The type of binding being used.

@@ -10,6 +10,7 @@ namespace Juicy.Inject.Binding.Attributes {
     /// </remarks>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
     public class NamedAttribute : Attribute {
+
         public NamedAttribute(string name) {
             Name = name;
         }

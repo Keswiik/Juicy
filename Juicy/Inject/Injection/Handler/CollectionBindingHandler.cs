@@ -1,11 +1,7 @@
 ﻿using Juicy.Inject.Binding;
 using Juicy.Interfaces.Binding;
-using Juicy.Interfaces.Injection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
 
@@ -18,6 +14,7 @@ namespace Juicy.Inject.Injection.Handler {
         /// Create a new binding handler with the specified parent <paramref name="injector"/>.
         /// </summary>
         /// <param name="injector">The parent injector to use.</param>
+        /// <param name="loggerFactory">The logger factory used to create an ILogger.</param>
         internal CollectionBindingHandler(Injector injector, ILoggerFactory loggerFactory) : base(injector, loggerFactory) {
         }
 

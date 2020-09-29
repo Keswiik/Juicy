@@ -1,15 +1,13 @@
 ﻿using Juicy.Constants;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
- namespace Juicy.Reflection.Interfaces
-{
+namespace Juicy.Reflection.Interfaces {
+
     /// <summary>
     /// Cached information about a method, either public or static.
     /// </summary>
-    public interface ICachedMethod : IAttributeHolder
-    {
+    public interface ICachedMethod : IAttributeHolder {
 
         /// <summary>
         /// The method's name.

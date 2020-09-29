@@ -1,8 +1,6 @@
 ﻿using Juicy.Reflection.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Juicy.Reflection {
 
@@ -45,14 +43,12 @@ namespace Juicy.Reflection {
         /// <param name="type">The type to find methods within.</param>
         /// <param name="attribute">The attribute to look for.</param>
         /// <returns>A list of cached method information which may be empty.</returns>
-        public List<ICachedMethod> GetAttributedMethods(Type type, Type attribute)
-        {
+        public List<ICachedMethod> GetAttributedMethods(Type type, Type attribute) {
             CacheType(type);
 
             List<ICachedMethod> methods = new List<ICachedMethod>();
             ICachedType cachedType = typeCache[type];
-            foreach (string key in cachedType.Methods.Keys)
-            {
+            foreach (string key in cachedType.Methods.Keys) {
                 methods.AddRange(cachedType.Methods[key].FindAll(m => m.HasAttribute(attribute)));
             }
 

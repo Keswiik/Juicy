@@ -3,14 +3,11 @@ using Juicy.Inject.Exceptions;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Binding {
 
     /// <inheritdoc cref="IFactoryBinding"/>
     public sealed class FactoryBinding : Binding, IFactoryBinding {
-
         public Type GenericType { get; }
 
         public Type ImplementationType { get; }
@@ -55,7 +52,8 @@ namespace Juicy.Inject.Binding {
 
             public Type ImplementationType { get; private set; }
 
-            internal FactoryBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
+            internal FactoryBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
+            }
 
             /// <summary>
             /// Specifiy the base type and implementation type of the factory.
@@ -74,13 +72,15 @@ namespace Juicy.Inject.Binding {
         /// Builder used to produce new factory bindings.
         /// </summary>
         public sealed class FactoryBindingBuilder : FactoryBindingComponent<FactoryBindingBuilder>, IBuilder {
-            internal FactoryBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
+
+            internal FactoryBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
+            }
 
             IBinding IBuilder.Build() {
                 return new FactoryBinding(this);
             }
         }
 
-        #endregion
+        #endregion Builder
     }
 }

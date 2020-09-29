@@ -1,5 +1,4 @@
-﻿using Juicy.Inject.Binding.Attributes;
-using Juicy.Inject.Exceptions;
+﻿using Juicy.Inject.Exceptions;
 using Juicy.Inject.Storage;
 using Juicy.Interfaces.Injection;
 using Juicy.Interfaces.Storage;
@@ -7,14 +6,12 @@ using Juicy.Reflection;
 using Juicy.Reflection.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 
 namespace Juicy.Inject.Injection {
 
     /// <inheritdoc cref="ICreator"/>
     internal class Creator : ICreator {
-
         private Injector Injector { get; }
 
         private Reflector Reflector { get; }
@@ -163,9 +160,11 @@ namespace Juicy.Inject.Injection {
                 case 1:
                     suffix = "st";
                     break;
+
                 case 2:
                     suffix = "nd";
                     break;
+
                 case 3:
                     suffix = "rd";
                     break;

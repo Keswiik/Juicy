@@ -104,6 +104,6 @@ namespace Juicy.Inject.Binding {
             }
         }
 
-        #endregion
+        #endregion Builder
     }
 }

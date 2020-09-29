@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Juicy.Interfaces.Injection {
+﻿namespace Juicy.Interfaces.Injection {
 
     /// <summary>
     /// A wrapper that enables lazily-loaded access to injectable type at runtime.

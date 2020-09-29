@@ -1,13 +1,9 @@
 ﻿using Juicy.Constants;
 using Juicy.Inject.Binding;
 using Juicy.Interfaces.Binding;
-using Juicy.Interfaces.Injection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
 
@@ -20,7 +16,7 @@ namespace Juicy.Inject.Injection.Handler {
         /// Creates a new dictionary binding handler.
         /// </summary>
         /// <param name="injector">The injector to forward implementing type requests to.</param>
-        /// <param name="creator">The creator to use.</param>
+        /// <param name="loggerFactory">The logger factory used to create an ILogger.</param>
         internal DictionaryBindingHandler(Injector injector, ILoggerFactory loggerFactory) : base(injector, loggerFactory) {
         }
 
@@ -31,6 +27,7 @@ namespace Juicy.Inject.Injection.Handler {
          *      Loop over all keys, request instance of implementing types from the injector
          *      Cache dictionary if necessary
          */
+
         public override object Handle(IBinding binding, Type type, string name) {
             var dictionaryBinding = binding as DictionaryBinding;
             var hitCache = dictionaryBinding.Scope == BindingScope.Singleton;

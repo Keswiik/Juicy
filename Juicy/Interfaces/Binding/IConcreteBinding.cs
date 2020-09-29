@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Interfaces.Binding {
-    
+
     /// <summary>
     /// Binds a single type (<see cref="IBinding.BaseType"/>) to another type or instance.
     /// </summary>
     public interface IConcreteBinding : IBinding {
-        
+
         /// <summary>
         /// The type implementing <see cref="IBinding.BaseType"/>.
         /// </summary>

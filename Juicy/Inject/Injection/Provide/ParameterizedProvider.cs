@@ -1,7 +1,4 @@
 ﻿using Juicy.Interfaces.Injection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Provide {
 
@@ -10,7 +7,6 @@ namespace Juicy.Inject.Injection.Provide {
     /// </summary>
     /// <typeparam name="T">The type of value being provided during injection.</typeparam>
     internal class ParameterizedProvider<T> : Provider, IProvider<T> {
-
         private T Instance { get; set; }
 
         /// <inheritdoc/>

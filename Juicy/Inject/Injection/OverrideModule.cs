@@ -5,8 +5,6 @@ using Juicy.Interfaces.Storage;
 using Juicy.Reflection;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace Juicy.Inject.Injection {
 
@@ -14,7 +12,6 @@ namespace Juicy.Inject.Injection {
     /// Internal module used to override bindings from another module.
     /// </summary>
     internal sealed class OverrideModule : AbstractModule {
-
         private static readonly IMethodBindingFactory MethodBindingFactory = new MethodBindingFactory(new Reflector());
 
         private AbstractModule BaseModule { get; }
@@ -50,7 +47,6 @@ namespace Juicy.Inject.Injection {
                 CacheBinding(binding);
             }
 
-
             return bindings;
         }
 
@@ -70,7 +66,7 @@ namespace Juicy.Inject.Injection {
             }
         }
 
-        private  bool IsCached(Type type, string name) {
+        private bool IsCached(Type type, string name) {
             return name != null ? //
                 BindingCache.IsCached(type, name) : //
                 BindingCache.IsCached(type);
