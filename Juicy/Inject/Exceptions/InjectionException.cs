@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Exceptions {
 
@@ -8,6 +6,7 @@ namespace Juicy.Inject.Exceptions {
     /// Exception thrown when an error occurs during injection.
     /// </summary>
     public sealed class InjectionException : InvalidOperationException {
+
         public InjectionException() {
         }
 

@@ -1,11 +1,10 @@
 ﻿using Juicy.Interfaces.Storage;
 using System.Collections.Generic;
 
- namespace Juicy.Inject.Storage {
-    
+namespace Juicy.Inject.Storage {
+
     /// <inheritdoc cref="IGroupedCache{T, K}"/>
     internal sealed class InMemoryGroupedCache<T, K> : IGroupedCache<T, K> {
-        
         private Dictionary<K, T> Dictionary { get; }
 
         private T DefaultValue { get; set; }

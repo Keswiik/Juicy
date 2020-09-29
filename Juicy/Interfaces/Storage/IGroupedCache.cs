@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
- namespace Juicy.Interfaces.Storage {
+﻿namespace Juicy.Interfaces.Storage {
 
     /// <summary>
     /// A cache that stores both a default value and keyed values of the same type.

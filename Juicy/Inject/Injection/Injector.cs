@@ -11,13 +11,11 @@ using Juicy.Reflection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection {
 
     /// <inheritdoc cref="IInjector"/>
     internal class Injector : IInjector {
-
         internal ICache<object, Type, string> InstanceCache { get; }
 
         internal ICache<IBinding, Type, string> BindingCache { get; }
@@ -36,10 +34,10 @@ namespace Juicy.Inject.Injection {
 
         private readonly ILoggerFactory loggerFactory;
 
-
         /// <summary>
         /// Creates the injector, initializes binding handlers, and gets all module bindings.
         /// </summary>
+        /// <param name="loggerFactory">The logger factory used to create an ILogger.</param>
         /// <param name="modules">The modules to get bindings from.</param>
         internal Injector(ILoggerFactory loggerFactory, params AbstractModule[] modules) : this(null, loggerFactory, modules) { }
 
@@ -47,6 +45,7 @@ namespace Juicy.Inject.Injection {
         /// Creates an injector with a parent to delegate requests to if there is no binding.
         /// </summary>
         /// <param name="parentInjector">The parent to this injector.</param>
+        /// <param name="loggerFactory">The logger factory used to create an ILogger.</param>
         /// <param name="modules">The modules to get bindings from.</param>
         internal Injector(Injector parentInjector, ILoggerFactory loggerFactory, params AbstractModule[] modules) {
             ParentInjector = parentInjector;
@@ -70,7 +69,6 @@ namespace Juicy.Inject.Injection {
                 { BindingType.None, new NoBindingHandler(this, loggerFactory, Creator) },
                 { BindingType.Provider, new ProviderBindingHandler(this, loggerFactory) }
             };
-
 
             foreach (AbstractModule module in modules) {
                 logger?.LogTrace("Processing bindings for module of type {ModuleType}", module.GetType().Name);
@@ -113,7 +111,7 @@ namespace Juicy.Inject.Injection {
             return Get( //
                 name == null ?
                     BindingCache.Get(type) : //
-                    BindingCache.Get(type, name), 
+                    BindingCache.Get(type, name),
                 type, name);
         }
 
@@ -163,7 +161,7 @@ namespace Juicy.Inject.Injection {
         internal void SetInstance(IBinding binding, object instance, Type type, string name) {
             if (instance == null) {
                 throw new InvalidOperationException($"Attempted to bind null to instance for binding of type {binding.BaseType}");
-            }else if (name != null) {
+            } else if (name != null) {
                 if (!InstanceCache.IsCached(type, name)) {
                     InstanceCache.Cache(instance, type, name);
                 } else {

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
- namespace Juicy.Reflection.Interfaces
-{
+namespace Juicy.Reflection.Interfaces {
+
     /// <summary>
     /// A container used to provide access to attributes on an item.
     /// </summary>
-    public interface IAttributeHolder
-    {
-        
+    public interface IAttributeHolder {
+
         /// <summary>
         /// Checks if the container has an attribute of type <paramref name="type"/>.
         /// </summary>

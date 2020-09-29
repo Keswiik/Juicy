@@ -1,10 +1,7 @@
 ﻿using Juicy.Inject.Binding;
 using Juicy.Interfaces.Binding;
-using Juicy.Interfaces.Injection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
 
@@ -17,6 +14,7 @@ namespace Juicy.Inject.Injection.Handler {
         /// Creates a handler with the specified parent injector.
         /// </summary>
         /// <param name="injector">The parent injector to use.</param>
+        /// <param name="loggerFactory">The logger factory used to create an ILogger.</param>
         internal ProviderBindingHandler(Injector injector, ILoggerFactory loggerFactory) : base(injector, loggerFactory) { }
 
         /*
@@ -27,6 +25,7 @@ namespace Juicy.Inject.Injection.Handler {
          *          Get value from provider
          *          Cache the new value and return it
          */
+
         public override object Handle(IBinding binding, Type type, string name) {
             var concreteBinding = binding as ConcreteBinding;
             var hitCache = concreteBinding.Scope == Constants.BindingScope.Singleton;

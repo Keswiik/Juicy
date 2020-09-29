@@ -2,10 +2,9 @@
 using Juicy.Interfaces.Injection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
+
     internal abstract class AbstractBindingHander : IBindingHandler {
         protected Injector Injector { get; set; }
 
@@ -17,6 +16,8 @@ namespace Juicy.Inject.Injection.Handler {
         }
 
         public abstract object Handle(IBinding binding, Type type, string name);
-        public virtual void Initialize(IBinding binding) { }
+
+        public virtual void Initialize(IBinding binding) {
+        }
     }
 }

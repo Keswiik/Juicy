@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Juicy.Interfaces.Injection {
+﻿namespace Juicy.Interfaces.Injection {
 
     /// <summary>
     /// Associates names to provided values during factory-based injection.

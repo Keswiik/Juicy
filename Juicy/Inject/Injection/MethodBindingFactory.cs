@@ -6,15 +6,12 @@ using Juicy.Interfaces.Injection;
 using Juicy.Reflection;
 using Juicy.Reflection.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection {
 
     /// <inheritdoc cref="IMethodBindingFactory"/>
     internal class MethodBindingFactory : IMethodBindingFactory {
-
         private static readonly Type ProvidesAttributeType = typeof(ProvidesAttribute);
 
         private Reflector Reflector { get; }

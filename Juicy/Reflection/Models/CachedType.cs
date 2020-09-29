@@ -7,7 +7,6 @@ namespace Juicy.Reflection.Models {
 
     ///<inheritdoc cref="ICachedType"/>
     internal sealed class CachedType : AttributeHolder, ICachedType {
-
         public List<ICachedMethod> Constructors { get; }
 
         public Dictionary<string, List<ICachedMethod>> Methods { get; }
@@ -20,7 +19,7 @@ namespace Juicy.Reflection.Models {
         /// Consumes builder to fill out attributes.
         /// </summary>
         /// <param name="component">The component to pull method information from.</param>
-        private  CachedType(ICachedTypeComponent component) : base(component) {
+        private CachedType(ICachedTypeComponent component) : base(component) {
             Constructors = component._Constructors;
             Methods = component._Methods;
             Type = component._Type;
@@ -79,7 +78,7 @@ namespace Juicy.Reflection.Models {
                 _Constructors.AddRange(methods);
                 return this as T;
             }
-            
+
             /// <summary>
             /// Adds a method to the type.
             /// </summary>
@@ -108,8 +107,7 @@ namespace Juicy.Reflection.Models {
             /// </summary>
             /// <param name="type">The type.</param>
             /// <returns>The builder.</returns>
-            public T Type(Type type)
-            {
+            public T Type(Type type) {
                 _Type = type;
 
                 return this as T;

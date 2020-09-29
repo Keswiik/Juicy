@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
- namespace Juicy.Reflection.Interfaces {
+namespace Juicy.Reflection.Interfaces {
 
     /// <summary>
     /// Caches basic information about a type.

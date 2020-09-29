@@ -4,14 +4,11 @@ using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Juicy.Inject.Binding {
 
     /// <inheritdoc cref="ICollectionBinding"/>
     public sealed class CollectionBinding : Binding, ICollectionBinding {
-
         public List<Type> ImplementationTypes { get; }
 
         /// <summary>
@@ -64,13 +61,15 @@ namespace Juicy.Inject.Binding {
         /// Builder used to produce new collection bindings.
         /// </summary>
         public class CollectionBindingBuilder : CollectionBindingComponent<CollectionBindingBuilder>, IBuilder {
-            internal CollectionBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
+
+            internal CollectionBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
+            }
 
             IBinding IBuilder.Build() {
                 return new CollectionBinding(this);
             }
         }
 
-        #endregion
+        #endregion Builder
     }
 }

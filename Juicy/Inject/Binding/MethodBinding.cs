@@ -3,14 +3,11 @@ using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using Juicy.Reflection.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Binding {
 
     /// <inheritdoc cref="IMethodBinding"/>
     public sealed class MethodBinding : Binding, IMethodBinding {
-
         public ICachedMethod Method { get; }
 
         /// <summary>
@@ -26,7 +23,7 @@ namespace Juicy.Inject.Binding {
         }
 
         // don't know much about this until runtime, can't validate.
-        protected override void Validate() {}
+        protected override void Validate() { }
 
         #region Builder
 
@@ -39,7 +36,8 @@ namespace Juicy.Inject.Binding {
         public abstract class MethodBindingComponent<T> : BindingComponent<T>, IMethodBindingComponent where T : MethodBindingComponent<T> {
             public ICachedMethod _Method { get; private set; }
 
-            internal MethodBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
+            internal MethodBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
+            }
 
             /// <summary>
             /// Sets the method to be bound.
@@ -52,18 +50,19 @@ namespace Juicy.Inject.Binding {
             }
         }
 
-
         /// <summary>
         /// Builder used to produce new method bindings.
         /// </summary>
         public sealed class MethodBindingBuilder : MethodBindingComponent<MethodBindingBuilder>, IBuilder {
-            internal MethodBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
+
+            internal MethodBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
+            }
 
             IBinding IBuilder.Build() {
                 return new MethodBinding(this);
             }
         }
 
-        #endregion
+        #endregion Builder
     }
 }

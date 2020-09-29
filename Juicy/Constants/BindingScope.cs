@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Juicy.Constants {
+﻿namespace Juicy.Constants {
 
     /// <summary>
     /// Determines how an object should be instantiated.

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
- namespace Juicy.Reflection {
+namespace Juicy.Reflection {
 
     /// <summary>
     /// Factory responsible for producing <b>all</b> cached type information used by the <see cref="Reflector"/>.

@@ -1,16 +1,11 @@
-﻿using Juicy.Inject.Binding.Attributes;
-using Juicy.Interfaces.Injection;
+﻿using Juicy.Interfaces.Injection;
 using Juicy.Reflection;
 using Juicy.Reflection.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection {
 
     /// <inheritdoc cref="IMethodInvoker"/>
     internal class MethodInvoker : IMethodInvoker {
-
         private Injector Injector { get; }
 
         private Reflector Reflector { get; }

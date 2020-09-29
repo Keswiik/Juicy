@@ -3,8 +3,6 @@ using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
 
@@ -12,13 +10,13 @@ namespace Juicy.Inject.Injection.Handler {
     /// Handler used to create injections based on <see cref="ConcreteBinding"/>
     /// </summary>
     internal sealed class ConcreteBindingHandler : AbstractBindingHander {
-
         private ICreator Creator { get; }
 
         /// <summary>
         /// Creates a new handler with the specified parent injector and instance creator.
         /// </summary>
         /// <param name="injector">The parent injector to use.</param>
+        /// <param name="loggerFactory">The logger factory used to create an ILogger.</param>
         /// <param name="creator">The creator to use.</param>
         internal ConcreteBindingHandler(Injector injector, ILoggerFactory loggerFactory, ICreator creator) : base(injector, loggerFactory) {
             Creator = creator;

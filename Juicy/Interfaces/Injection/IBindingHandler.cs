@@ -1,10 +1,8 @@
 ﻿using Juicy.Interfaces.Binding;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Interfaces.Injection {
-    
+
     /// <summary>
     /// Handles requests for specific bindings.
     /// </summary>

@@ -3,9 +3,7 @@ using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
 
@@ -17,6 +15,12 @@ namespace Juicy.Inject.Injection.Handler {
 
         private readonly ICreator creator;
 
+        /// <summary>
+        /// Creates a new factory binding handler.
+        /// </summary>
+        /// <param name="injector">The injector to pass to factory proxies.</param>
+        /// <param name="loggerFactory">The logger factory used to create an ILogger.</param>
+        /// <param name="creator">The creator to pass to factory proxies.</param>
         internal FactoryBindingHandler(Injector injector, ILoggerFactory loggerFactory, ICreator creator) : base(injector, loggerFactory) {
             this.creator = creator;
         }

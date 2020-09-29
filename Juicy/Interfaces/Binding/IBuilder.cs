@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Juicy.Interfaces.Binding {
+﻿namespace Juicy.Interfaces.Binding {
 
     /// <summary>
     /// Allows for bindings to be built.

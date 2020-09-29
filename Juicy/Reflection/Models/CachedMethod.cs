@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
- namespace Juicy.Reflection.Models {
+namespace Juicy.Reflection.Models {
 
     /// <inheritdoc cref="ICachedMethod"/>
     internal sealed class CachedMethod : AttributeHolder, ICachedMethod {
-
         private readonly MethodBase methodBase;
 
         public List<ICachedParameter> Parameters { get; }

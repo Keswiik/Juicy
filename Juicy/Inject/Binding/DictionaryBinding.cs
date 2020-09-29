@@ -4,14 +4,11 @@ using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using static Juicy.Inject.Binding.DictionaryBinding;
 
 namespace Juicy.Inject.Binding {
 
     /// <inheritdoc cref="IDictionaryBinding"/>
     public sealed class DictionaryBinding : Binding, IDictionaryBinding {
-
         public Dictionary<object, Type> ImplementationTypes { get; }
 
         private DictionaryBinding(IDictionaryBindingComponent component) : base(component) {
@@ -59,13 +56,15 @@ namespace Juicy.Inject.Binding {
         }
 
         public class DictionaryBindingBuilder : DictionaryBindingComponent<DictionaryBindingBuilder>, IBuilder {
-            internal DictionaryBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
+
+            internal DictionaryBindingBuilder(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {
+            }
 
             IBinding IBuilder.Build() {
                 return new DictionaryBinding(this);
             }
         }
 
-        #endregion
+        #endregion Builder
     }
 }

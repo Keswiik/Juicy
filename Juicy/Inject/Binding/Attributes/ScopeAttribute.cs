@@ -1,7 +1,5 @@
 ﻿using Juicy.Constants;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Juicy.Inject.Binding.Attributes {
 

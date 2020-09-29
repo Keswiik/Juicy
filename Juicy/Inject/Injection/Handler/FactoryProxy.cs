@@ -1,9 +1,7 @@
 ﻿using Juicy.Inject.Binding.Attributes;
 using Juicy.Interfaces.Injection;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Juicy.Inject.Injection.Handler {
 
@@ -11,7 +9,6 @@ namespace Juicy.Inject.Injection.Handler {
     /// Proxy implementation and delegates requests to an ICreator instance to handle injection with external parameters.
     /// </summary>
     public class FactoryProxy : DispatchProxy {
-
         internal ICreator Creator { get; set; }
 
         internal Type ResultType { get; set; }

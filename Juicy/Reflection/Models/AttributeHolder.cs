@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
- namespace Juicy.Reflection.Models {
+namespace Juicy.Reflection.Models {
 
     /// <summary>
     /// Attribute holder that allows for extensible builders and inheritance.

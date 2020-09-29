@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Juicy.Inject.Injection.Provide {
+﻿namespace Juicy.Inject.Injection.Provide {
 
     /// <summary>
-    /// Exposes unparameterized 
+    /// Exposes unparameterized
     /// </summary>
     internal abstract class Provider {
-
         protected bool CacheInstance { get; }
 
         protected bool InstanceCached { get; set; }
