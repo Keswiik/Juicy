@@ -130,7 +130,7 @@ namespace Juicy.Inject.Injection {
         }
 
         private string FormatFailedInjectionMessage(Type beingCreated, Type failedToCreate, int parameterNumber, ICachedMethod constructor) {
-            return $"Failed to inject {FormatParameterNumber(parameterNumber)} ({failedToCreate.Name}) in constructor {FormatConstructor(constructor)} while creating {beingCreated.FullName}.";
+            return $"Failed to inject {FormatParameterNumber(parameterNumber)} parameter ({failedToCreate.Name}) in constructor {FormatConstructor(constructor)} while creating {beingCreated.FullName}.";
         }
 
         private string FormatFailedParameterMatchingMessage(Type beingCreated, IParameterData missingParameter, ICachedMethod constructor) {
@@ -143,7 +143,7 @@ namespace Juicy.Inject.Injection {
             StringBuilder sb = new StringBuilder();
             sb.Append(constructor.Name).Append('(');
             for (var i = 0; i < constructor.Parameters.Count; i++) {
-                sb.Append(constructor.Parameters[i].Name);
+                sb.Append(constructor.Parameters[i].Type.Name);
                 if (i != constructor.Parameters.Count - 1) {
                     sb.Append(", ");
                 }
