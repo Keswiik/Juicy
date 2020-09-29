@@ -3,12 +3,21 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1</Version>
+    <Version>0.1.1-alpha</Version>
+    <Authors>Keswiik</Authors>
+    <Company />
+    <Product />
+    <PackageProjectUrl>https://keswiik.github.io/Juicy/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Keswiik/Juicy</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>dependency-injection, Guice, dotnetcore3.1</PackageTags>
+    <Nullable>disable</Nullable>
+    <Description>Juicy is a lightweight implementation of Google's Guice dependency injection framework for Java. Currently, the project supports most basic Guice functionality.</Description>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Inject\Injection\Handler\CollectionBindingHandler.cs~RF4b568741.TMP" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />
