@@ -20,6 +20,10 @@ namespace Juicy.Inject.Binding {
             Validate();
         }
 
+        public override string ToString() {
+            return $"DictionaryBinding[name={Name} scope={Enum.GetName(typeof(BindingScope), Scope)} dictionaryType={BaseType.Name} implementationCount={ImplementationTypes.Count}]";
+        }
+
         protected override void Validate() {
             var keyType = BaseType.GenericTypeArguments[0];
             var type = BaseType.GenericTypeArguments[1];

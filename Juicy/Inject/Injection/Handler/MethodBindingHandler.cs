@@ -1,6 +1,7 @@
 ﻿using Juicy.Inject.Binding;
 using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,7 @@ namespace Juicy.Inject.Injection.Handler {
     /// <summary>
     /// Handler used to create injections based on <see cref="MethodBinding"/>.
     /// </summary>
-    internal sealed class MethodBindingHandler : IBindingHandler {
-
-        private Injector Injector { get; }
+    internal sealed class MethodBindingHandler : AbstractBindingHander {
 
         private IMethodInvoker MethodInvoker { get; }
 
@@ -21,19 +20,20 @@ namespace Juicy.Inject.Injection.Handler {
         /// </summary>
         /// <param name="injector">The parent injector to use.</param>
         /// <param name="methodInvoker">The method invoker to use.</param>
-        internal MethodBindingHandler(Injector injector, IMethodInvoker methodInvoker) {
-            Injector = injector;
+        internal MethodBindingHandler(Injector injector, ILoggerFactory loggerFactory, IMethodInvoker methodInvoker) : base(injector, loggerFactory) {
             MethodInvoker = methodInvoker;
         }
 
-        public object Handle(IBinding binding, Type type, string name) {
+        public override object Handle(IBinding binding, Type type, string name) {
             var methodBinding = binding as MethodBinding;
             bool hitCache = methodBinding.Scope == Constants.BindingScope.Singleton;
             bool isCached = Injector.IsCached(methodBinding.BaseType, methodBinding.Name);
 
             if (!hitCache || !isCached) {
+                logger?.LogTrace("Creating implementation for {Binding}.", methodBinding);
                 var instance = MethodInvoker.Invoke(methodBinding.Module, methodBinding.Method);
                 if (hitCache) {
+                    logger?.LogTrace("Caching implementation for {Binding}.", methodBinding);
                     Injector.SetInstance(methodBinding, instance, type, name);
                 }
 
@@ -42,7 +42,5 @@ namespace Juicy.Inject.Injection.Handler {
 
             return Injector.GetInstance(type, name);
         }
-
-        public void Initialize(IBinding binding) { }
     }
 }

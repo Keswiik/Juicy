@@ -4,6 +4,7 @@ using Juicy.Interfaces.Binding;
 using Juicy.Interfaces.Injection;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Juicy.Inject.Binding {
@@ -21,6 +22,10 @@ namespace Juicy.Inject.Binding {
             ImplementationTypes = component.ImplementationTypes;
 
             Validate();
+        }
+
+        public override string ToString() {
+            return $"CollectionBinding[name={Name} scope={Enum.GetName(typeof(BindingScope), Scope)} collectionType={BaseType.Name} implementationCount={ImplementationTypes.Count}]";
         }
 
         protected override void Validate() {
