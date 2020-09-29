@@ -8,19 +8,19 @@
       
       
       
-      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.1">
     
     
       
-        <title>Methods - Juicy Documentation</title>
+        <title>Logging - Juicy Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.38780c08.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.38780c08.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f72e892.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f72e892.min.css">
         
           
           
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#method-bindings" class="md-skip">
+        <a href="#logging" class="md-skip">
           Skip to content
         </a>
       
@@ -71,7 +71,7 @@
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="../.." title="Juicy Documentation" class="md-header-nav__button md-logo" aria-label="Juicy Documentation">
+    <a href=".." title="Juicy Documentation" class="md-header-nav__button md-logo" aria-label="Juicy Documentation">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -88,7 +88,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Methods
+              Logging
             
           </span>
         </div>
@@ -156,7 +156,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Juicy Documentation" class="md-nav__button md-logo" aria-label="Juicy Documentation">
+    <a href=".." title="Juicy Documentation" class="md-nav__button md-logo" aria-label="Juicy Documentation">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -186,20 +186,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../.." title="Getting Started" class="md-nav__link">
+    <a href=".." title="Getting Started" class="md-nav__link">
       Getting Started
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="../../logging/" title="Logging" class="md-nav__link">
-      Logging
     </a>
   </li>
 
@@ -211,9 +199,57 @@
   
 
 
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--active">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Logging
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" title="Logging" class="md-nav__link md-nav__link--active">
+      Logging
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#serilog" class="md-nav__link">
+    Serilog
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
     
     <label class="md-nav__link" for="nav-3">
       Bindings
@@ -233,7 +269,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../overview/" title="Overview" class="md-nav__link">
+    <a href="../bindings/overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
   </li>
@@ -245,7 +281,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../explicit/" title="Explicit" class="md-nav__link">
+    <a href="../bindings/explicit/" title="Explicit" class="md-nav__link">
       Explicit
     </a>
   </li>
@@ -257,7 +293,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../collections/" title="Collections" class="md-nav__link">
+    <a href="../bindings/collections/" title="Collections" class="md-nav__link">
       Collections
     </a>
   </li>
@@ -269,7 +305,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../dictionaries/" title="Dictionaries" class="md-nav__link">
+    <a href="../bindings/dictionaries/" title="Dictionaries" class="md-nav__link">
       Dictionaries
     </a>
   </li>
@@ -281,7 +317,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../factories/" title="Factories" class="md-nav__link">
+    <a href="../bindings/factories/" title="Factories" class="md-nav__link">
       Factories
     </a>
   </li>
@@ -291,20 +327,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="Methods" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../bindings/methods/" title="Methods" class="md-nav__link">
       Methods
     </a>
-    
   </li>
 
         
@@ -314,7 +341,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../providers/" title="Providers" class="md-nav__link">
+    <a href="../bindings/providers/" title="Providers" class="md-nav__link">
       Providers
     </a>
   </li>
@@ -342,6 +369,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#serilog" class="md-nav__link">
+    Serilog
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -352,39 +394,73 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/Keswiik/Juicy/edit/master/docs/bindings/methods.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/Keswiik/Juicy/edit/master/docs/logging.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="method-bindings">Method Bindings<a class="headerlink" href="#method-bindings" title="Permanent link">&para;</a></h1>
-<p>Useful when you need to inject a class that isn't correctly attributed for injections. This usually includes 3<sup>rd</sup> party dependencies.</p>
-<div class="highlight"><pre><span></span><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">Module</span> <span class="p">:</span> <span class="n">AbstractModule</span> <span class="p">{</span>
-<span class="na">    [Provides]</span>
-<span class="na">    [Singleton]</span>
-    <span class="k">public</span> <span class="n">DbConnection</span> <span class="nf">ProvideDatabaseConnection</span><span class="p">(</span>
-<span class="na">            [Named(&quot;connectionString&quot;)]</span> <span class="kt">string</span> <span class="n">connectionString</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">SqliteConnection</span><span class="p">(</span><span class="n">connectionString</span><span class="p">);</span>
+                <h1 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h1>
+<p>Juicy supports logging through the <a href="Microsoft.Extensions.Logging.Abstractions">Microsoft Logging Abstractions</a>.
+In order for logs to appear, an <code>ILoggingFactory</code> must be provider to the <code>Juicer</code> prior to creating an injector.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Juicer</span><span class="p">.</span><span class="n">AddLogging</span><span class="p">(</span><span class="k">new</span> <span class="n">LoggerFactory</span><span class="p">());</span>
+<span class="n">Juicer</span><span class="p">.</span><span class="n">CreateInjector</span><span class="p">(</span><span class="k">new</span> <span class="n">Module</span><span class="p">());</span>
+</code></pre></div>
+
+<p><strong>All</strong> logging in Juicy is done at the Trace/Verbose level. <strong>No</strong> exceptions will ever be logged; they will always bubble back up to their corresponding <code>Get()</code> call or factory method invocation.</p>
+<h2 id="serilog">Serilog<a class="headerlink" href="#serilog" title="Permanent link">&para;</a></h2>
+<p>To add logging support through Serilog, add the <code>Serilog.Extensions.Logging</code> package, then whatever combination of configuration and sinks you desire.</p>
+<p>For our example, we will be using the following Serilog and Microsoft packages to enable configuration through <code>appsettings.json</code>:</p>
+<ul>
+<li><code>Serilog.Settings.Configuration</code></li>
+<li><code>Serilog.Sinks.Console</code></li>
+<li><code>Serilog.Sinks.File</code></li>
+<li><code>Microsoft.Extensions.Configuration.Json</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kt">var</span> <span class="n">configuration</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ConfigurationBuilder</span><span class="p">()</span>
+    <span class="p">.</span><span class="n">SetBasePath</span><span class="p">(</span><span class="n">Directory</span><span class="p">.</span><span class="n">GetCurrentDirectory</span><span class="p">())</span>
+    <span class="p">.</span><span class="n">AddJsonFile</span><span class="p">(</span><span class="s">&quot;appsettings.json&quot;</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">Build</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">logger</span> <span class="p">=</span> <span class="k">new</span> <span class="n">LoggerConfiguration</span><span class="p">()</span>
+    <span class="p">.</span><span class="n">ReadFrom</span><span class="p">.</span><span class="n">Configuration</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">CreateLogger</span><span class="p">();</span>
+
+<span class="n">Juicer</span><span class="p">.</span><span class="n">AddLogging</span><span class="p">(</span><span class="k">new</span> <span class="n">SerilogLoggerFactory</span><span class="p">(</span><span class="n">logger</span><span class="p">:</span> <span class="n">logger</span><span class="p">));</span>
+</code></pre></div>
+
+<p>The above will create loggers that read their configuration from <code>./appsettings.json</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="nt">&quot;Serilog&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;Using&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;Serilog.Sinks.Console&quot;</span><span class="p">,</span> <span class="s2">&quot;Serilog.Sinks.File&quot;</span> <span class="p">],</span>
+    <span class="nt">&quot;MinimumLevel&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Default&quot;</span><span class="p">:</span>  <span class="s2">&quot;Verbose&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;WriteTo&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nt">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;Console&quot;</span> <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&quot;Name&quot;</span><span class="p">:</span> <span class="s2">&quot;File&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;Args&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;Logs/log.txt&quot;</span> <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;Enrich&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;FromLogContext&quot;</span><span class="p">,</span> <span class="s2">&quot;WithMachineName&quot;</span><span class="p">,</span> <span class="s2">&quot;WithThreadId&quot;</span> <span class="p">],</span>
+    <span class="nt">&quot;Properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;Application&quot;</span><span class="p">:</span> <span class="s2">&quot;Sample&quot;</span>
     <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="p">...</span>
-
-<span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">PersonServiceImpl</span> <span class="p">{</span>
-    <span class="k">private</span> <span class="n">DbConnection</span> <span class="n">connection</span><span class="p">;</span>
-
-<span class="na">    [Inject]</span>
-    <span class="k">private</span> <span class="nf">PersonServiceImpl</span><span class="p">(</span><span class="n">DbConnection</span> <span class="n">connection</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">connection</span> <span class="p">=</span> <span class="n">connection</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="n">IPerson</span> <span class="nf">GetByFirstName</span><span class="p">(</span><span class="kt">string</span> <span class="n">firstname</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// use connection</span>
-    <span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 
-<p>Bindings of this type are <strong>only</strong> detected when they are within a subclass of <code>AbstractModule</code>.</p>
+<p>This configuration will send logs both the console and a <code>log.txt</code> file.</p>
+<p>What follows is example output that would be seen when an injector is processing bindings at startup.</p>
+<div class="highlight"><pre><span></span><code>2020-09-29 12:12:46.778 -05:00 [VRB] Processing bindings for module of type OverrideModule
+2020-09-29 12:12:46.968 -05:00 [VRB] Resolved binding MethodBinding[name=PrintString scope=Singleton baseType=String method=ProvidePrintString]
+2020-09-29 12:12:46.970 -05:00 [VRB] Resolved binding MethodBinding[name=DoubledNum1 scope=Singleton baseType=Int32 method=ProvideDoubledNum1]
+2020-09-29 12:12:46.971 -05:00 [VRB] Resolved binding ConcreteBinding[name= scope=Singleton baseType=IService implementation=ServiceImpl]
+2020-09-29 12:12:46.971 -05:00 [VRB] Resolved binding ConcreteBinding[name= scope=Singleton baseType=ServiceImpl implementation=ServiceImpl]
+2020-09-29 12:12:46.972 -05:00 [VRB] Resolved binding ConcreteBinding[name= scope=Singleton baseType=IExternallyProvidedService implementation=IExternallyProvidedService]
+2020-09-29 12:12:46.973 -05:00 [VRB] Resolved binding CollectionBinding[name= scope=Instance collectionType=HashSet`1 implementationCount=2]
+2020-09-29 12:12:46.973 -05:00 [VRB] Resolved binding FactoryBinding[name= scope=Instance factoryType=IOtherServiceFactory genericType=IOtherService implementationType=OtherServiceImpl]
+2020-09-29 12:12:46.974 -05:00 [VRB] Resolved binding DictionaryBinding[name= scope=Singleton dictionaryType=Dictionary`2 implementationCount=2]
+</code></pre></div>
                 
               
               
@@ -403,7 +479,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../factories/" title="Factories" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href=".." title="Getting Started" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -412,19 +488,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Factories
+                Getting Started
               </div>
             </div>
           </a>
         
         
-          <a href="../providers/" title="Providers" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../bindings/overview/" title="Overview" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Providers
+                Overview
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
@@ -451,15 +527,15 @@
       
     </div>
     
-      <script src="../../assets/javascripts/vendor.77e55a48.min.js"></script>
-      <script src="../../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/vendor.77e55a48.min.js"></script>
+      <script src="../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
-          base: "../..",
+          base: "..",
           features: ['tabs'],
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.4ac00218.min.js"
+            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
