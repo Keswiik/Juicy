@@ -1,5 +1,6 @@
 ﻿using Juicy.Constants;
 using Juicy.Inject.Binding;
+using Juicy.Inject.Exceptions;
 using Juicy.Inject.Injection.Handler;
 using Juicy.Inject.Injection.Provide;
 using Juicy.Inject.Storage;
@@ -133,7 +134,8 @@ namespace Juicy.Inject.Injection {
         /// <param name="name">The name of the binding.</param>
         /// <returns>The object instance.</returns>
         internal object Get(IBinding binding, Type type, string name) {
-            return BindingHandlers[binding?.Type ?? BindingType.None].Handle(binding, type, name);
+            var instance = BindingHandlers[binding?.Type ?? BindingType.None].Handle(binding, type, name);
+            return instance ?? throw new InjectionException($"Null was returned for binding of type {type.Name}.");
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Juicy.Inject.Binding.Attributes;
+using Juicy.Inject.Exceptions;
 using Juicy.Inject.Storage;
 using Juicy.Interfaces.Injection;
 using Juicy.Interfaces.Storage;
@@ -41,35 +42,38 @@ namespace Juicy.Inject.Injection {
                 return Reflector.Invoke(constructor, null);
             } else if (constructor.Parameters.Count > 0) {
                 var parameters = new object[constructor.Parameters.Count];
+                int i = 0;
 
                 // TODO: maybe sort the parameters when I cache them to avoid needing to do this nonsense
+                // (technically speaking they are already sorted, but I don't do it explicitly)
                 // match the parameters with their position in the map
-                for (int i = 0; i < parameters.Length; i++) {
-                    var parameter = constructor.Parameters.Find(p => p.Position == i);
-                    if (parameter == null) {
-                        throw new InvalidOperationException($"Failed to locate the parameter at position {i} in type {type}.");
+                try {
+                    for (; i < parameters.Length; i++) {
+                        var parameter = constructor.Parameters.Find(p => p.Position == i);
+
+                        if (!string.IsNullOrWhiteSpace(parameter.Name)) {
+                            parameters[i] = Injector.Get(parameter.Type, parameter.Name);
+                        } else {
+                            parameters[i] = Injector.Get(parameter.Type, null);
+                        }
                     }
 
-                    if (!string.IsNullOrWhiteSpace(parameter.Name)) {
-                        parameters[i] = Injector.Get(parameter.Type, parameter.Name);
-                    } else {
-                        parameters[i] = Injector.Get(parameter.Type, null);
-                    }
+                    return Reflector.Invoke(constructor, null, parameters);
+                } catch (Exception e) {
+                    throw new InjectionException(FormatFailedInjectionMessage(type, constructor.Parameters[i].Type, constructor.Parameters[i].Position + 1, constructor), e);
                 }
-
-                return Reflector.Invoke(constructor, null, parameters);
             }
 
-            throw new InvalidOperationException($"Something horrible went wrong, could not create an instance of the type {type}.");
+            throw new InjectionException($"Something horrible went wrong, could not create an instance of the type {type}.");
         }
 
         public object CreateInstanceWithParameters(Type type, params IParameterData[] args) {
             ICachedMethod constructor = GetConstructor(type);
 
             if (constructor.Parameters.Count == 0 && args.Length != 0) {
-                throw new InvalidOperationException($"Arguments were provided to create type {type.FullName}, but its constructor takes no arguments");
+                throw new InjectionException($"Arguments were provided to create type {type.FullName}, but its constructor takes no arguments");
             } else if (constructor.Parameters.Count < args.Length) {
-                throw new InvalidOperationException($"Arguments were provided to create type {type.FullName}, but its constructor takes less arguments");
+                throw new InjectionException($"Arguments were provided to create type {type.FullName}, but its constructor takes less arguments");
             }
 
             var parameters = new object[constructor.Parameters.Count];
@@ -98,8 +102,9 @@ namespace Juicy.Inject.Injection {
                             injectableParameters.Remove(parameter);
                         }
                     }
+
                     if (!foundParameter) {
-                        throw new InvalidOperationException($"Failed to find a matching parameter of type {argType.FullName} while constructing {type.FullName}.");
+                        throw new InjectionException(FormatFailedParameterMatchingMessage(type, args[i], constructor));
                     }
                 }
 
@@ -110,20 +115,63 @@ namespace Juicy.Inject.Injection {
 
             // map injected parameters
             foreach (var injectableParameter in injectableParameters) {
-                parameters[injectableParameter.Position] = Injector.Get(injectableParameter.Type, injectableParameter.Name);
+                try {
+                    parameters[injectableParameter.Position] = Injector.Get(injectableParameter.Type, injectableParameter.Name);
+                } catch (Exception e) {
+                    throw new InjectionException(FormatFailedInjectionMessage(type, injectableParameter.Type, injectableParameter.Position + 1, constructor), e);
+                }
             }
 
             return Reflector.Invoke(constructor, null, parameters);
         }
 
         private ICachedMethod GetConstructor(Type type) {
-            ICachedMethod constructor = Reflector.GetInjectableConstructor(type);
+            return Reflector.GetInjectableConstructor(type);
+        }
 
-            if (constructor == null) {
-                throw new InvalidOperationException($"No injectable constructors found for the type {type}");
+        private string FormatFailedInjectionMessage(Type beingCreated, Type failedToCreate, int parameterNumber, ICachedMethod constructor) {
+            return $"Failed to inject {FormatParameterNumber(parameterNumber)} ({failedToCreate.Name}) in constructor {FormatConstructor(constructor)} while creating {beingCreated.FullName}.";
+        }
+
+        private string FormatFailedParameterMatchingMessage(Type beingCreated, IParameterData missingParameter, ICachedMethod constructor) {
+            return string.IsNullOrWhiteSpace(missingParameter.Name) ?
+                $"Failed to find a matching parameter of type {missingParameter.Value.GetType().Name} named {missingParameter.Name} in constructor {FormatConstructor(constructor)} while creating {beingCreated.FullName}." :
+                $"Failed to find a matching parameter of type {missingParameter.Value.GetType().Name} in constructor {FormatConstructor(constructor)} while creating {beingCreated.FullName}.";
+        }
+
+        private string FormatConstructor(ICachedMethod constructor) {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(constructor.Name).Append('(');
+            for (var i = 0; i < constructor.Parameters.Count; i++) {
+                sb.Append(constructor.Parameters[i].Name);
+                if (i != constructor.Parameters.Count - 1) {
+                    sb.Append(", ");
+                }
+            }
+            sb.Append(")");
+            return sb.ToString();
+        }
+
+        private string FormatParameterNumber(int parameterNumber) {
+            // Realistically speaking, this should never go over 100. If it does, someone has a problem and it isn't me.
+            if (parameterNumber > 10 && parameterNumber <= 20) {
+                return "th";
             }
 
-            return constructor;
+            string suffix = "th";
+            switch (parameterNumber % 10) {
+                case 1:
+                    suffix = "st";
+                    break;
+                case 2:
+                    suffix = "nd";
+                    break;
+                case 3:
+                    suffix = "rd";
+                    break;
+            }
+
+            return $"{parameterNumber}{suffix}";
         }
     }
 }
