@@ -49,26 +49,20 @@ namespace Juicy.Inject.Binding {
 
         /// <inheritdoc/>
         private interface IConcreteBindingComponent : IBindingBuilderComponent {
-            internal Type ImplementationType { get; }
+            Type ImplementationType { get; }
 
-            internal object Instance { get; }
+            object Instance { get; }
 
-            internal Type Provider { get; }
+            Type Provider { get; }
         }
 
         /// <inheritdoc/>
         public abstract class ConcreteBindingComponent<T> : BindingComponent<T>, IConcreteBindingComponent where T : ConcreteBindingComponent<T> {
-            Type IConcreteBindingComponent.ImplementationType => ImplementationType;
+            public Type ImplementationType { get; private set; }
 
-            object IConcreteBindingComponent.Instance => Instance;
+            public object Instance { get; private set; }
 
-            Type IConcreteBindingComponent.Provider => Provider;
-
-            private Type ImplementationType { get; set; }
-
-            private object Instance { get; set; }
-
-            private Type Provider { get; set; }
+            public  Type Provider { get; private set; }
 
             internal ConcreteBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) { }
 

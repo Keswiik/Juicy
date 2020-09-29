@@ -22,6 +22,9 @@ namespace Juicy.Interfaces.Binding {
         /// </remarks>
         public object Instance { get; }
 
+        /// <summary>
+        /// The provider used to produce an instance of <see cref="IBinding.BaseType"/>
+        /// </summary>
         public Type Provider { get; }
     }
 }

@@ -63,7 +63,10 @@ namespace Juicy.Inject.Injection {
         /// <summary>
         /// All explicit bindings using <see cref="Bind{T}"/>, <see cref="BindFactory{T}"/>, or <see cref="BindMany{T}"/> should be added in the override of this method.
         /// </summary>
-        public abstract void Configure();
+        /// <remarks>
+        /// The default implementation does nothing. Not all consumers may need to use this method.
+        /// </remarks>
+        public virtual void Configure() { }
 
         virtual internal List<IBinding> GetBindings() {
             List<IBinding> bindings = new List<IBinding>();

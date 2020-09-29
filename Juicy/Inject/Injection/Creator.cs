@@ -30,11 +30,11 @@ namespace Juicy.Inject.Injection {
         internal Creator(Injector injector, Reflector reflector) {
             Injector = injector;
             Reflector = reflector;
-            ParameterMapping = new Cache<List<ICachedParameter>, Type, string>();
-            InjectableParametersMapping = new Cache<List<ICachedParameter>, Type, string>();
+            ParameterMapping = new InMemoryCache<List<ICachedParameter>, Type, string>();
+            InjectableParametersMapping = new InMemoryCache<List<ICachedParameter>, Type, string>();
         }
 
-        object ICreator.CreateInstance(Type type) {
+        public object CreateInstance(Type type) {
             ICachedMethod constructor = GetConstructor(type);
 
             if (constructor.Parameters.Count == 0) {
@@ -63,7 +63,7 @@ namespace Juicy.Inject.Injection {
             throw new InvalidOperationException($"Something horrible went wrong, could not create an instance of the type {type}.");
         }
 
-        object ICreator.CreateInstanceWithParameters(Type type, params IParameterData[] args) {
+        public object CreateInstanceWithParameters(Type type, params IParameterData[] args) {
             ICachedMethod constructor = GetConstructor(type);
 
             if (constructor.Parameters.Count == 0 && args.Length != 0) {

@@ -38,12 +38,10 @@ namespace Juicy.Inject.Binding {
         #region Builder
 
         private interface IDictionaryBindingComponent : IBindingBuilderComponent {
-            internal Dictionary<object, Type> ImplementationTypes { get; }
+            Dictionary<object, Type> ImplementationTypes { get; }
         }
 
         public class DictionaryBindingComponent<T> : BindingComponent<T>, IDictionaryBindingComponent where T : DictionaryBindingComponent<T> {
-            Dictionary<object, Type> IDictionaryBindingComponent.ImplementationTypes => ImplementationTypes;
-
             public Dictionary<object, Type> ImplementationTypes { get; }
 
             internal DictionaryBindingComponent(Type type, BindingType bindingType, IModule module) : base(type, bindingType, module) {

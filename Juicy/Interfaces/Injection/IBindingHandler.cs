@@ -23,13 +23,13 @@ namespace Juicy.Interfaces.Injection {
         /// <param name="type">The raw type that was requested.</param>
         /// <param name="name">The raw name that was requested.</param>
         /// <returns>The requested object.</returns>
-        internal object Handle(IBinding binding, Type type, string name);
+        object Handle(IBinding binding, Type type, string name);
 
         /// <summary>
         /// Initializes a binding.
         /// </summary>
         /// <remarks>Should only be called after checking if the binding requires initialization.</remarks>
         /// <param name="binding">The binding to initialize.</param>
-        internal void Initialize(IBinding binding);
+        void Initialize(IBinding binding);
     }
 }

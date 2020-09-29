@@ -5,15 +5,15 @@ using System.Collections.Generic;
  namespace Juicy.Inject.Storage {
 
     /// <inheritdoc cref="ICache{T, K, N} "/>
-    internal sealed class Cache<T, K, N> : ICache<T, K, N> {
+    internal sealed class InMemoryCache<T, K, N> : ICache<T, K, N> {
 
         private Dictionary<K, IGroupedCache<T, N>> Dictionary { get; }
 
-        internal Cache() {
+        internal InMemoryCache() {
             Dictionary = new Dictionary<K, IGroupedCache<T, N>>();
         }
 
-        void ICache<T, K, N>.Cache(T value, K key) {
+        public void Cache(T value, K key) {
             var groupedCache = GetGroupedCache(key);
             if (groupedCache == null) {
                 groupedCache = CreateAndStore(key);
@@ -26,11 +26,8 @@ using System.Collections.Generic;
             groupedCache.Cache(value);
         }
 
-        void ICache<T, K, N>.Cache(T value, K key, N subKey) {
-            var groupedCache = GetGroupedCache(key);
-            if (groupedCache == null) {
-                groupedCache = CreateAndStore(key);
-            }
+        public void Cache(T value, K key, N subKey) {
+            var groupedCache = GetGroupedCache(key) ?? CreateAndStore(key);
 
             if (groupedCache.IsCached(subKey)) {
                 throw new InvalidOperationException($"Cache already contains an instance of {value} with sub-key {subKey}");
@@ -39,23 +36,23 @@ using System.Collections.Generic;
             groupedCache.Cache(value, subKey);
         }
 
-        T ICache<T, K, N>.Get(K key) {
+        public T Get(K key) {
             var groupedCache = GetGroupedCache(key);
 
             return groupedCache != null ? groupedCache.Get() : default;
         }
 
-        T ICache<T, K, N>.Get(K key, N subKey) {
+        public T Get(K key, N subKey) {
             var groupedCache = GetGroupedCache(key);
 
             return groupedCache != null ? groupedCache.Get(subKey) : default;
         }
 
-        bool ICache<T, K, N>.IsCached(K key) {
+        public bool IsCached(K key) {
             return GetGroupedCache(key)?.IsCached() == true;
         }
 
-        bool ICache<T, K, N>.IsCached(K key, N subKey) {
+        public bool IsCached(K key, N subKey) {
             return GetGroupedCache(key)?.IsCached(subKey) == true;
         }
 
@@ -65,7 +62,7 @@ using System.Collections.Generic;
         }
 
         private IGroupedCache<T, N> CreateAndStore(K key) {
-            var groupedCache = new GroupedCache<T, N>();
+            var groupedCache = new InMemoryGroupedCache<T, N>();
             Dictionary[key] = groupedCache;
             return groupedCache;
         }

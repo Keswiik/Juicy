@@ -37,42 +37,32 @@ namespace Juicy.Inject.Binding {
         /// <summary>
         /// Component to be extended in sublcasses to gain access to builder properties.
         /// </summary>
-        public interface IBindingBuilderComponent {
-            internal Type BaseType { get; }
+        protected interface IBindingBuilderComponent {
+            Type BaseType { get; }
 
-            internal IModule Module { get; }
+            IModule Module { get; }
 
-            internal BindingScope BindingScope { get; }
+            BindingScope BindingScope { get; }
 
-            internal BindingType BindingType { get; }
+            BindingType BindingType { get; }
 
-            internal string Name { get; }
+            string Name { get; }
         }
 
         /// <summary>
         /// Builder logic used by subclasses to avoid re-implementing builder functionality downstream.
         /// </summary>
         /// <typeparam name="T">The type of the builder inheriting the component.</typeparam>
-        public abstract class BindingComponent<T> : IBindingBuilderComponent where T : BindingComponent<T>, IBindingBuilderComponent {
-            Type IBindingBuilderComponent.BaseType => BaseType;
+        public abstract class BindingComponent<T> : IBindingBuilderComponent where T : BindingComponent<T> {
+            public Type BaseType { get; }
 
-            IModule IBindingBuilderComponent.Module => Module;
+            public IModule Module { get; }
 
-            BindingScope IBindingBuilderComponent.BindingScope => BindingScope;
+            public BindingScope BindingScope { get; set; }
 
-            BindingType IBindingBuilderComponent.BindingType => BindingType;
+            public BindingType BindingType { get; set; }
 
-            string IBindingBuilderComponent.Name => Name;
-
-            protected Type BaseType { get; }
-
-            protected IModule Module { get; }
-
-            protected BindingScope BindingScope { get; set; }
-
-            protected BindingType BindingType { get; set; }
-
-            protected string Name { get; set; }
+            public string Name { get; set; }
 
             internal BindingComponent(Type type, BindingType bindingType, IModule module) {
                 BaseType = type;

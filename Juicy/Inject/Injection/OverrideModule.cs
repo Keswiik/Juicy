@@ -26,7 +26,7 @@ namespace Juicy.Inject.Injection {
         internal OverrideModule(AbstractModule module, AbstractModule toOverride) {
             BaseModule = module;
             OverriddenModule = toOverride;
-            BindingCache = new Cache<IBinding, Type, string>();
+            BindingCache = new InMemoryCache<IBinding, Type, string>();
         }
 
         internal override List<IBinding> GetBindings() {

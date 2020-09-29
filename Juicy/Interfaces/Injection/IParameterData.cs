@@ -12,11 +12,11 @@ namespace Juicy.Interfaces.Injection {
         /// <summary>
         /// The name of the parameter.
         /// </summary>
-        internal string Name { get; }
+        string Name { get; }
 
         /// <summary>
         /// The value of the parameter.
         /// </summary>
-        internal object Value { get; }
+        object Value { get; }
     }
 }
